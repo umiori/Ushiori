@@ -19,7 +19,7 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 /* 首頁 */
 .head h1{margin:0 0 8px;font-size:1.3rem;font-weight:700;letter-spacing:.02em}
 .head p{margin:0 auto 22px;font-size:.64rem;line-height:1.8;color:rgba(251,234,241,.85);text-wrap:balance}
-.heart{width:min(370px,100%);margin:6px auto 0}.heart img{width:100%;display:block;border-radius:16px}
+.heart{width:min(370px,100%);margin:6px auto 0}.heart img{width:100%;display:block}
 .card,.pc,.qa,.mini{background:var(--glass);border:1px solid var(--line);border-radius:16px;color:var(--ink)}
 .card{padding:14px 12px;margin-bottom:14px}
 .glass{width:92%;margin:26px auto 0;background:rgba(255,255,255,.26);border-color:rgba(255,255,255,.45)}
@@ -139,14 +139,14 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 @keyframes bob{to{transform:translateY(-5px)}}.chibi.flip{transform:scaleX(-1)}
 .say{position:absolute;bottom:66px;background:#fff;color:var(--deep);border-radius:12px;padding:4px 10px;font-size:.78rem;white-space:nowrap;display:none}
 /* 載入畫面 */
-#loader{position:fixed;inset:0;z-index:100;background:var(--base);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .6s,visibility .6s}
+#loader{position:fixed;inset:0;z-index:100;background:var(--base) url("photo/fm1.jpg") center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .6s,visibility .6s}
 #loader.done{opacity:0;visibility:hidden}
 #loader .top{width:min(96px,28vw);aspect-ratio:1/1;object-fit:cover;border-radius:16px;border:2px solid var(--ink);background:rgba(255,255,255,.18)}
 #loader .top.cut{object-fit:contain;border:0;background:none;border-radius:0}
-#loader .trackwrap{position:relative;width:min(160px,46vw);margin-top:28px;padding-top:38px}
+#loader .trackwrap{position:relative;width:min(160px,46vw);margin-top:28px;padding-top:158px}
 #loader .track2{height:9px;border:1.5px solid var(--ink);border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
 #loader .fill{height:100%;width:0;border-radius:99px;background:var(--ink)}
-#loader .runner{position:absolute;top:0;left:0;width:36px;height:36px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink);animation:hop .5s ease-in-out infinite alternate}
+#loader .runner{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:150px;object-fit:contain;animation:none}
 #loader .runner.cut{object-fit:contain;border:0;border-radius:0}
 @keyframes hop{to{transform:translateY(-5px) rotate(6deg)}}
 #loader .txt{display:flex;margin-top:14px;font-size:.68rem;letter-spacing:.28em;padding-left:.28em}
@@ -167,7 +167,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 <div class="wrap">
   <section class="page on" id="p-home">
     <div class="head"><h1>♥ USHIORI ♥</h1><p>静かなる恒星、流れゆく星雲。<br>重力の果てに帰り着き、無限の色彩に永遠を映す。</p></div>
-    <div class="heart"><img src="photo/fm1.jpg" alt=""></div>
+    <div class="heart"><img src="photo/2.PNG" alt=""></div>
     <div class="card glass">
       <h2 class="names"><span id="nameA"></span><i>♡</i><span id="nameB"></span></h2>
       <div class="divider"><span>✦</span><i></i><b>♥</b><i></i><span>✦</span></div>
@@ -440,7 +440,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   [...'LOADING...'].forEach((ch,i)=>{const sp=document.createElement('span');sp.textContent=ch;sp.style.animationDelay=(i*0.09)+'s';$('lTxt').appendChild(sp);});
   document.body.style.overflow='hidden';setTimeout(()=>{n=total;},6000);
   urls.forEach(u=>{const im=new Image();im.onload=im.onerror=()=>{n++};im.src=u;});
-  function paint(p){fill.style.width=p+'%';run.style.left=`calc(${p}% - ${p/100*run.offsetWidth}px)`;pct.textContent=Math.round(p)+'%';}
+  function paint(p){fill.style.width=p+'%';pct.textContent=Math.round(p)+'%';}
   function enter(){ld.classList.add('done');document.body.style.overflow='';setTimeout(startChat,3500);
     if(!TRACKS.length)return;load(0,false);au.play().catch(()=>{addEventListener('pointerdown',()=>{if(au.paused)au.play().catch(()=>{});},{once:true});});}
   function frame(now){const timeP=Math.min(1,(now-t0)/DURATION),easeP=1-Math.pow(1-timeP,1.6),realP=total?Math.min(1,n/total):1;
