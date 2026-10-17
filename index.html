@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>USHIORI</title>
+<style>
+/* ===== USHIORI 整理版（所有樣式合併成一份，顏色集中在最上面） ===== */
+:root{--base:#9686a0;--ink:#fbeaf1;--deep:#5b4358;--glass:rgba(255,255,255,.16);--line:rgba(255,255,255,.32);--soft:#ecdcee;--nav:54px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:13px;background:var(--base)}
+html::before{content:"";position:fixed;left:0;top:0;width:100%;height:100lvh;z-index:-1;background:var(--base) url("photo/bg5.PNG") center top/cover no-repeat}
+body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-align:center;
+ font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei","Helvetica Neue",Arial,sans-serif;
+ padding-bottom:calc(var(--nav) + 110px + env(safe-area-inset-bottom))}
+.wrap{max-width:430px;margin:0 auto;padding:30px 34px 20px}
+.page{display:none}.page.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 首頁 */
+.head h1{margin:0 0 8px;font-size:1.3rem;font-weight:700;letter-spacing:.02em}
+.head p{margin:0 auto 22px;font-size:.64rem;line-height:1.8;color:rgba(251,234,241,.85);text-wrap:balance}
+.heart{width:min(330px,90%);margin:6px auto 0}.heart img{width:100%;display:block}
+.card,.pc,.qa,.mini{background:var(--glass);border:1px solid var(--line);border-radius:16px;color:var(--ink)}
+.card{padding:14px 12px;margin-bottom:14px}
+.glass{width:92%;margin:26px auto 0;background:rgba(255,255,255,.26);border-color:rgba(255,255,255,.45)}
+.names{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:6px;margin:0;font-size:clamp(8px,3vw,12px);font-weight:700;line-height:1.4;white-space:nowrap;color:#fff4f8}
+.names i{font-style:normal;padding:0 2px;color:#f3cfe0}
+.divider{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px auto;max-width:300px;font-size:.5rem;color:rgba(251,234,241,.85)}
+.divider i{flex:1;height:1px;background:rgba(251,234,241,.5)}.divider b{font-weight:400;font-size:.66rem}
+.since{font-size:.6rem;letter-spacing:.14em;color:rgba(255,255,255,.9)}
+.n{margin:4px 0 0;font-size:1.7rem;color:#fff4f8}
+/* 音樂（置中一欄） */
+.mp{width:84%;min-width:240px;margin:14px auto 0;padding:12px 16px 14px;background:rgba(255,255,255,.2)}
+.mph{display:flex;justify-content:space-between;align-items:center;font-size:1.1rem;line-height:1}
+.mph button{border:0;background:none;color:var(--ink);font-size:1rem;cursor:pointer;padding:2px 6px;line-height:1}
+.mt{margin:8px 0 0;font-size:.95rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp.min .mpb{display:none}
+.pbar{position:relative;height:18px;margin:12px 0 2px;touch-action:none;cursor:pointer}
+.pbar::before{content:"";position:absolute;left:0;right:0;top:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.3)}
+.pfill{position:absolute;left:0;top:6px;height:6px;width:0;border-radius:99px;background:rgba(255,255,255,.75)}
+.pthumb{position:absolute;top:2px;left:0;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid var(--deep)}
+.ptm{display:flex;justify-content:space-between;font-size:.62rem;opacity:.8}
+.ctl{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:12px}
+.ctl button{width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.24);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.ctl button#pp{width:52px;height:52px}
+.ctl button svg{width:18px;height:18px}
+.lk{border:0;background:none;color:var(--ink);padding:6px 8px;cursor:pointer;font-size:.58rem;letter-spacing:.08em;line-height:1.4;opacity:.7;text-decoration:none;display:inline-block;margin:6px 6px 0}
+/* 角色頁 */
+.sheet{border-radius:16px;overflow:hidden;margin-bottom:14px;cursor:pointer;background:#fff}
+.sheet img{width:100%;display:block;max-height:68vh;object-fit:contain}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.pc{padding:12px 10px}.pc h2{margin:0;font-size:.95rem;font-weight:500;color:#fff4f8}
+.en{margin:2px 0 8px;font-size:.6rem;letter-spacing:.14em;color:rgba(251,234,241,.7)}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
+.dots i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.6)}
+.pc dl{margin:0}.pc dt{margin-top:9px;font-size:.58rem;letter-spacing:.12em;color:rgba(251,234,241,.7)}
+.pc dd{margin:1px 0 0;font-size:.82rem;line-height:1.55;color:#fff}
+.mini{margin-top:12px;padding:14px 12px}
+.mini h3,.qh{margin:0 0 10px;font-size:.62rem;font-weight:400;letter-spacing:.2em;color:#fff4f8}
+.qh{font-size:.7rem;margin:2px 0 14px}
+.mrow{margin-bottom:12px}.mrow:last-child{margin-bottom:0}
+.lab{display:block;margin-bottom:5px;font-size:.6rem;letter-spacing:.08em;color:rgba(251,234,241,.7)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pair span,.both{background:#fff;color:var(--deep);border-radius:99px;padding:6px 10px;font-size:.85rem}.both{display:block}
+.qa{padding:14px 12px;margin-bottom:12px}.qa h3{margin:0 0 10px;font-size:.82rem;font-weight:500;color:#fff4f8}
+.qa h3 b{margin-right:6px;color:#f3cfe0}.pair .ans{background:#fff;color:var(--deep);border-radius:14px;padding:8px 10px;font-size:.82rem;line-height:1.6}
+.ans:last-child{background:#f6e3ed}.who{display:block;margin-bottom:2px;font-size:.58rem;letter-spacing:.12em;color:#a595c0}
+/* 相簿 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.item{background:#fff;color:var(--deep);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.item img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.item .t{padding:8px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.item h3{margin:0;font-size:.9rem}.item .lab{margin:0;color:#a595c0}.item .txt{margin:0;font-size:.8rem;line-height:1.5}
+.item .dt{width:100%;margin-top:auto;padding-top:6px;border-top:1px solid #eee;font-style:italic;font-size:.78rem}
+/* 分頁列、按鈕 */
+nav{position:fixed;left:40px;right:40px;bottom:calc(8px + env(safe-area-inset-bottom));max-width:420px;margin:0 auto;height:var(--nav);z-index:30;display:flex;padding:3px;border-radius:18px;
+ background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line)}
+nav button{flex:1;border:0;background:none;color:var(--ink);opacity:.72;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.5rem;letter-spacing:.1em;border-radius:15px;cursor:pointer}
+nav button svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
+.fab{position:fixed;right:14px;z-index:25;width:38px;height:38px;border-radius:50%;font-size:.9rem;cursor:pointer;color:#fff;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4)}
+#fabNote{bottom:calc(var(--nav) + 24px + env(safe-area-inset-bottom))}
+.btn{border:0;background:#fbeaf1;color:#7a5a82;border-radius:99px;padding:8px 16px;font-family:inherit;cursor:pointer;margin-top:8px}
+/* 通知與彈窗 */
+.toast{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translate(-50%,-140%);width:calc(100% - 28px);max-width:380px;z-index:70;background:rgba(255,250,252,.97);color:var(--deep);
+ border-radius:18px;padding:8px 12px;display:flex;gap:10px;align-items:center;text-align:left;cursor:pointer;box-shadow:0 8px 22px rgba(60,30,80,.3);transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
+.toast.show{transform:translate(-50%,0)}
+.toast b{display:block;font-size:.8rem}.toast span{display:block;font-size:.78rem;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tBadge{background:#d97aa5;color:#fff;border-radius:99px;min-width:20px;height:20px;padding:0 6px;font-size:.7rem;font-style:normal;display:none;align-items:center;justify-content:center}
+.modal{position:fixed;inset:0;background:rgba(70,40,90,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+#m-card{z-index:60}.modal.open{display:flex}
+.win{width:100%;max-width:400px;max-height:84vh;overflow:auto;background:#fbf3f7;color:var(--deep);border-radius:14px;box-shadow:0 14px 30px rgba(60,30,80,.35);animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.bar{display:flex;justify-content:space-between;align-items:center;background:var(--soft);padding:8px 12px;font-size:.85rem;position:sticky;top:0}
+.bar button{width:24px;height:24px;border:0;background:#fff;border-radius:7px;font-size:.75rem;padding:0;color:var(--deep);cursor:pointer}
+.body{padding:14px;font-size:.9rem;line-height:1.8}.body img{width:100%;border-radius:10px;margin-bottom:10px;display:block}
+.hint{text-align:center;font-size:.75rem;opacity:.6;padding:6px}
+.chat{display:flex;flex-direction:column;gap:8px;min-height:200px;text-align:left}
+.crow{display:flex;gap:8px;align-items:flex-end;width:100%}.crow.me{flex-direction:row-reverse}
+.av{width:34px;height:34px;flex:0 0 34px;border-radius:50%;object-fit:cover;background:#eadff0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:1.05rem}
+.b{max-width:76%;padding:8px 12px;border-radius:14px;background:#d8c2e2;color:#4a3558;opacity:0;animation:in .3s forwards}
+.b.me{background:#f1dfeb}.b.sticker-bubble{background:transparent;padding:0}
+.b.sticker-bubble img{width:130px;max-width:100%;height:auto;margin:0;border-radius:0}
+@keyframes in{to{opacity:1}}
+.typing{display:flex;gap:4px;padding:11px 14px}.typing i{width:6px;height:6px;border-radius:50%;background:#a58bd0;animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{transform:translateY(-4px);opacity:.4}}
+/* 便條留言板 */
+#noteText{width:100%;min-height:120px;resize:vertical;border:1px solid #d8c9ee;border-radius:12px;padding:10px;font-family:inherit;font-size:.88rem;color:var(--deep);background:#fff}
+#noteNick{width:58%;border:1px solid #d8c9ee;border-radius:99px;padding:6px 12px;margin-bottom:6px;font-family:inherit;font-size:.78rem;color:var(--deep);background:#fff}
+#swatches{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+.sw{width:36px;height:36px;border-radius:9px;border:2.5px solid transparent;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}.sw.on{border-color:var(--deep)}
+.noteRow{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;margin-top:6px}
+.wall{border:1px solid rgba(163,130,172,.3);border-radius:18px;padding:16px 8px 22px;min-height:150px;background:rgba(163,130,172,.16);display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:8px 2px}
+.sn{position:relative;padding:11px 12px 13px;box-shadow:0 3px 8px rgba(120,100,150,.2);font-size:.82rem;line-height:1.6;color:#5a4b63;word-break:break-word;cursor:pointer;text-align:center}
+.sn:hover{transform:none!important;z-index:20!important}
+.sn .hd{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;font-size:.5rem;color:#a090ae}
+.sn .nm{font-weight:700;color:#6b5a78;font-size:.64rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:5.5em}
+.sn .tm{margin-left:auto;white-space:nowrap}
+.sn .tx{white-space:pre-wrap;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lc,8);overflow:hidden}
+.sh{overflow:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:none}.sh>*{flex:0 0 auto;min-width:0}
+.sh::before,.sh::after{display:none}.sh .hd{flex-wrap:wrap;margin-bottom:3px}.sh .tm{margin-left:0;width:100%;order:3;font-size:.52rem}.sh .tx{font-size:.74rem;line-height:1.45}
+.sh-sq{border-radius:10px;padding:12px;box-shadow:0 3px 8px rgba(120,100,150,.2)}.sh-ci{border-radius:50%;box-shadow:0 3px 8px rgba(120,100,150,.2)}
+.sh-he,.sh-st{border-radius:0;filter:drop-shadow(0 3px 4px rgba(120,100,150,.28));background-size:100% 100%;background-repeat:no-repeat}
+.s0{background:#fadadf;border-radius:4px}
+.s0::before{content:"";position:absolute;top:-8px;right:-12px;width:48px;height:16px;background:rgba(255,255,255,.6);transform:rotate(38deg)}
+.s1{background:#e8f3fd;border-radius:3px;padding-top:22px}
+.s1::before{content:"";position:absolute;top:5px;left:8px;right:8px;height:10px;background:radial-gradient(circle,#fbfdff 3px,transparent 3.6px) 0 0/14px 10px repeat-x}
+.s2{background:#fff repeating-linear-gradient(transparent 0 21px,#dfe7f0 21px 22px);background-position:0 8px;border-radius:3px;line-height:22px}
+.s2::before{content:"";position:absolute;top:-8px;left:50%;width:38px;height:15px;margin-left:-19px;background:#f6d8e2;border-radius:3px}
+.s3{background:#fbe5ec;border-radius:16px}.s3::after{content:"♥";position:absolute;right:7px;bottom:3px;color:#f3b0c4;font-size:1rem}
+.s4{background:#e3effb;border-radius:20px;margin-bottom:10px}
+.s4::after{content:"";position:absolute;left:20px;bottom:-9px;border:9px solid transparent;border-top-color:#e3effb;border-bottom:0}
+.s5{background:#eee5fb;border-radius:6px}.s5::after{content:"★";position:absolute;right:6px;top:-11px;color:#c7b0ee;font-size:1.2rem}
+/* 小人 */
+.stage{position:fixed;left:0;right:0;bottom:calc(var(--nav) + 12px + env(safe-area-inset-bottom));height:80px;pointer-events:none;overflow:hidden;z-index:20}
+.chibi{position:absolute;bottom:0;height:62px;pointer-events:auto;cursor:pointer;animation:bob .5s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-5px)}}.chibi.flip{transform:scaleX(-1)}
+.say{position:absolute;bottom:66px;background:#fff;color:var(--deep);border-radius:12px;padding:4px 10px;font-size:.78rem;white-space:nowrap;display:none}
+/* 載入畫面 */
+#loader{position:fixed;inset:0;z-index:100;background:var(--base);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .6s,visibility .6s}
+#loader.done{opacity:0;visibility:hidden}
+#loader .top{width:min(96px,28vw);aspect-ratio:1/1;object-fit:cover;border-radius:16px;border:2px solid var(--ink);background:rgba(255,255,255,.18)}
+#loader .top.cut{object-fit:contain;border:0;background:none;border-radius:0}
+#loader .trackwrap{position:relative;width:min(136px,40vw);margin-top:28px;padding-top:12px}
+#loader .track2{height:9px;border:1.5px solid var(--ink);border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
+#loader .fill{height:100%;width:0;border-radius:99px;background:var(--ink)}
+#loader .runner{position:absolute;top:-1px;left:0;width:20px;height:20px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink);animation:hop .5s ease-in-out infinite alternate}
+#loader .runner.cut{object-fit:contain;border:0;border-radius:0}
+@keyframes hop{to{transform:translateY(-5px) rotate(6deg)}}
+#loader .txt{display:flex;margin-top:14px;font-size:.68rem;letter-spacing:.28em;padding-left:.28em}
+#loader .txt span{display:inline-block;animation:jump 1.1s ease-in-out infinite}
+@keyframes jump{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+#loader .pct2{font-size:.5rem;letter-spacing:.18em;margin-top:5px;opacity:.7}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.b{opacity:1}}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <img class="top" id="lTop" alt="" hidden>
+  <div class="trackwrap"><img class="runner" id="lRun" alt="" hidden><div class="track2"><div class="fill" id="fill"></div></div></div>
+  <div class="txt" id="lTxt"></div><div class="pct2" id="pct">0%</div>
+</div>
+
+<div class="wrap">
+  <section class="page on" id="p-home">
+    <div class="head"><h1>♥ USHIORI ♥</h1><p>静かなる恒星、流れゆく星雲。<br>重力の果てに帰り着き、無限の色彩に永遠を映す。</p></div>
+    <div class="heart"><img src="photo/2.PNG" alt=""></div>
+    <div class="card glass">
+      <h2 class="names"><span id="nameA"></span><i>♡</i><span id="nameB"></span></h2>
+      <div class="divider"><span>✦</span><i></i><b>♥</b><i></i><span>✦</span></div>
+      <small class="since" id="since"></small>
+      <div class="n">D<span id="days"></span></div>
+    </div>
+    <div class="card mp" id="mp">
+      <div class="mph"><span>♪</span><button id="mpMin" aria-label="收合">—</button></div>
+      <div class="mt" id="mt"></div>
+      <div class="mpb">
+        <div class="pbar" id="pbar"><div class="pfill" id="pfill"></div><div class="pthumb" id="pthumb"></div></div>
+        <div class="ptm"><span id="t1">0:00</span><span id="t2">0:00</span></div>
+        <div class="ctl">
+          <button id="pv" aria-label="上一首"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 6h2.2v12H6zM19 6v12L9.5 12z"/></svg></button>
+          <button id="pp" aria-label="播放"></button>
+          <button id="nx" aria-label="下一首"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.8 6H18v12h-2.2zM5 6v12l9.5-6z"/></svg></button>
+        </div>
+        <button class="lk" id="imp">＋ 匯入音樂</button><a class="lk" id="spl" target="_blank" rel="noopener" hidden>在 Spotify 聽 ↗</a>
+        <input type="file" id="file" accept="audio/*" multiple hidden>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="p-profile">
+    <div class="sheet" id="sheet" hidden><img id="sheetImg" alt=""></div>
+    <div class="duo" id="chars"></div>
+    <div class="card mini" id="mini"><h3>✦ COUPLE NOTE ✦</h3></div>
+  </section>
+  <section class="page" id="p-gallery"><div class="grid" id="grid"></div></section>
+  <section class="page" id="p-qa"><div class="qh">✦ COUPLE Q&amp;A ✦</div><div id="qaList"></div></section>
+</div>
+
+<div class="toast" id="toast"><span id="tAv" style="flex:0 0 auto;width:auto"></span><div style="flex:1;min-width:0"><b id="tName"></b><span id="tText"></span></div><i id="tBadge"></i></div>
+<button class="fab" id="fabNote" title="匿名留言">💌</button>
+<div class="stage" id="stage"></div>
+
+<nav>
+  <button data-page="home" class="on"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg>HOME</button>
+  <button data-page="profile"><svg viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5M14.5 14.5c3 0 6 1 6 4.5"/></svg>PROFILE</button>
+  <button data-page="gallery"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M5 17l5-4 3 3 3-2 4 3"/></svg>GALLERY</button>
+  <button data-page="qa"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9.5 9.7a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 16.6v.2"/></svg>Q&amp;A</button>
+</nav>
+
+<div class="modal" id="m-card"><div class="win"><div class="bar"><span id="cTitle"></span><button data-close>✕</button></div>
+ <div class="body"><img id="cImg" alt=""><div class="lab" id="cDate"></div><div id="cText"></div></div></div></div>
+<div class="modal" id="m-chat"><div class="win"><div class="bar"><span id="chatName"></span><button data-close>✕</button></div>
+ <div class="body"><div class="chat" id="chat"></div></div><div class="hint" id="hint"></div></div></div>
+<div class="modal" id="m-note"><div class="win"><div class="bar"><span>貼一張便條</span><button data-close>✕</button></div>
+ <div class="body">
+  <input id="noteNick" type="text" maxlength="20" placeholder="NAME" autocomplete="off">
+  <textarea id="noteText" maxlength="300" placeholder="寫下想說的話⋯"></textarea>
+  <div class="hint" style="text-align:left;padding:2px 0">選一種便條紙</div><div id="swatches"></div>
+  <input id="noteHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+  <div class="noteRow"><span id="noteCount">0 / 300</span><button class="btn" id="noteSend">貼上去</button></div>
+  <div class="hint" id="noteStatus"></div><div class="wall" id="wall2" style="margin-top:10px"></div></div></div></div>
+
+<script>
+/* ===== 你要改的設定（圖片路徑留空 "" 就不會顯示） ===== */
+const START="2024-02-12";
+const NAME_A="Ushijima Wakatoshi", NAME_B="Sakurai Uori";
+const CHAT_NAME="大笨牛🐮";
+const AVATAR_A="", AVATAR_ME="";            // 聊天頭貼圖片路徑，留空就用 emoji 🐮 / 🐰
+const SHEET={img:"",title:"角色設定圖"};     // 角色頁大圖，例如 "photo/couple.jpg"
+const LOADER_TOP="", LOADER_TOP_CUT=false, LOADER_ASCII=true; // 載入畫面上方照片（留空＝不顯示）
+const LOADER_RUNNER="", LOADER_RUNNER_CUT=true;               // 進度條上跑的小圖（留空＝不顯示）
+const SPOTIFY="https://open.spotify.com/track/3iBgrkexCzVuPy4O9vx7Mf"; // 不要 Spotify 連結就改成 ""
+const TRACKS=[{name:"Glue Song",src:"music/glue-song.mp3"}]; // 歌曲清單：檔名要跟 music 資料夾裡的一樣；不放音樂就改成 []
+const CHIBIS=[]; // 走路小人，例如 [{img:"photo/chibi1.png",say:"今天也辛苦了"}]
+const SB_URL="", SB_KEY=""; // 留言板：Supabase 網址與 Publishable key
+const CHARS=[ // 左邊＝第一個，右邊＝第二個
+ {name:"Sakurai Uori（我）",en:"HEROINE",colors:["#c9a8d5","#665774","#a07c64"],info:[["生日","2月2日"],["身高","160cm"],["個性","寫幾個關鍵字"],["喜歡","喜歡的東西"],["一句話","自我介紹寫這裡"]]},
+ {name:"Ushijima Wakatoshi",en:"HERO",colors:["#5d5e3c","#3e3f1d","#9c8bb7"],info:[["生日","1月1日"],["身高","180cm"],["個性","寫幾個關鍵字"],["喜歡","喜歡的東西"],["一句話","自我介紹寫這裡"]]}];
+const MINI=[
+ {label:"動物型",l:"🐰 荷蘭垂耳兔",r:"🐶杜賓犬"},{label:"組名",both:"ＵＳＨＩＯＲＩ"},
+ {label:"符號",l:"🐮",r:"🐟"},{label:"代表物",l:"🏐️",r:"🎤"}];
+const CARDS=[ // img 留空＝只顯示文字卡片
+ {img:"",title:"第一張卡片",scene:"簡短的一句話，\n可以換行。",date:"2026.01.01",story:"點開後顯示的完整文字寫在這裡。"},
+ {img:"",title:"第二張卡片",scene:"另一句說明。",date:"2026.02.14",story:"第二張的完整內容。"},
+ {img:"",title:"第三張卡片",scene:"圖片可以是任何尺寸。",date:"2026.03.20",story:"第三張的完整內容。"},
+ {img:"",title:"第四張卡片",scene:"想加幾張就複製一行。",date:"2026.04.01",story:"第四張的完整內容。"}];
+const QA=[{q:"第一次見面的印象？"},{q:"最喜歡對方哪裡？"},{q:"如果只能去一個地方約會？"},{q:"想對對方說的話"}].map(x=>({...x,a:["回答寫這裡","回答寫這裡"]}));
+const CHAT=[["a","下班了嗎？"],["a","我買了一點你愛吃的東西，車停在公司側門，慢慢來我等你。"],["me","好꒰ᐢ٭°̧̧̧ω°̧̧̧٭ᐢ꒱"],["me",{type:"sticker",src:"photo/tt.PNG"}]];
+/* ======================== */
+
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
+const p2=n=>String(n).padStart(2,'0');
+
+/* 分頁、基本資料 */
+function showPage(p){document.querySelectorAll('.page').forEach(e=>e.classList.toggle('on',e.id==='p-'+p));
+  document.querySelectorAll('nav [data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===p));scrollTo(0,0);}
+document.querySelectorAll('nav [data-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+$('since').textContent='since '+START.replace(/-/g,'. ')+' ~';
+$('days').textContent=Math.max(0,Math.floor((Date.now()-new Date(START))/864e5)).toLocaleString();
+$('nameA').textContent=NAME_A;$('nameB').textContent=NAME_B;
+function openCard(title,img,date,html,pre){$('cTitle').textContent=title;$('cImg').style.display=img?'':'none';if(img)$('cImg').src=img;
+  $('cDate').textContent=date||'';$('cText').style.whiteSpace=pre?'pre-wrap':'';$('cText').innerHTML=html;$('m-card').classList.add('open');}
+
+/* 角色、小欄、Q&A、相簿 */
+CHARS.forEach(c=>{const d=document.createElement('div');d.className='pc';
+  d.innerHTML=`<h2>${esc(c.name)}</h2><div class="en">${esc(c.en||'')}</div><div class="dots">${(c.colors||[]).map(k=>`<i style="background:${esc(k)}"></i>`).join('')}</div><dl>${c.info.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`;$('chars').appendChild(d);});
+if(SHEET.img){$('sheet').hidden=false;$('sheetImg').src=SHEET.img;$('sheet').onclick=()=>openCard(SHEET.title,SHEET.img,'','');}
+MINI.forEach(m=>{const d=document.createElement('div');d.className='mrow';
+  d.innerHTML=`<span class="lab">${esc(m.label)}</span>`+(m.both!=null?`<span class="both">${esc(m.both)}</span>`:`<div class="pair"><span>${esc(m.l)}</span><span>${esc(m.r)}</span></div>`);$('mini').appendChild(d);});
+QA.forEach((x,i)=>{const d=document.createElement('div');d.className='card qa';
+  d.innerHTML=`<h3><b>Q${i+1}.</b>${esc(x.q)}</h3><div class="pair">${x.a.map((t,k)=>`<div class="ans"><span class="who">${esc((CHARS[k]||{}).name||'')}</span>${esc(t)}</div>`).join('')}</div>`;$('qaList').appendChild(d);});
+CARDS.forEach(c=>{const d=document.createElement('div');d.className='item';
+  d.innerHTML=(c.img?`<img src="${c.img}" alt="">`:'')+`<div class="t"><h3>${esc(c.title)}</h3><span class="lab">SCENE</span><p class="txt">${esc(c.scene)}</p><span class="dt">${esc(c.date)}</span></div>`;
+  d.onclick=()=>openCard(c.title,c.img,c.date,esc(c.story));$('grid').appendChild(d);});
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{
+  if(e.target===m||e.target.hasAttribute('data-close')){m.classList.remove('open');if(m.id==='m-chat')afterChatClose();}}));
+
+/* 聊天：對方訊息自動傳來，沒點開時通知停在畫面上方；輪到我方就停住等點一下 */
+let ci=0,running=false,unread=0,started=false;
+const chat=$('chat'),cm=$('m-chat'),toast=$('toast'),winEl=cm.querySelector('.win');
+$('chatName').textContent=CHAT_NAME;$('tName').textContent=CHAT_NAME;
+function mkAv(w){const s=w==='me'?AVATAR_ME:AVATAR_A,e=document.createElement(s?'img':'i');e.className='av';
+  if(s){e.alt='';e.src=s;}else e.textContent=w==='me'?'🐰':'🐮';return e;}
+$('tAv').appendChild(mkAv('a'));
+const isOpen=()=>cm.classList.contains('open');
+const waitingMe=()=>ci<CHAT.length&&CHAT[ci][0]==='me'&&!running;
+const down=()=>{winEl.scrollTop=winEl.scrollHeight};
+const updateHint=()=>{$('hint').textContent=waitingMe()?'click · 點一下回覆':'';};
+function mkRow(w){const r=document.createElement('div');r.className='crow'+(w==='me'?' me':'');r.appendChild(mkAv(w));return r;}
+function addBubble(w,t){const r=mkRow(w),d=document.createElement('div');d.className='b'+(w==='me'?' me':'');
+  if(t&&typeof t==='object'&&t.type==='sticker'){d.classList.add('sticker-bubble');const im=new Image();im.src=t.src;im.alt='貼圖';d.appendChild(im);}
+  else d.textContent=t;
+  r.appendChild(d);chat.appendChild(r);down();}
+function notify(t){if(isOpen())return;unread++;$('tText').textContent=typeof t==='object'?'傳了一張貼圖':t;
+  $('tBadge').textContent=unread;$('tBadge').style.display=unread>1?'flex':'none';toast.classList.add('show');}
+function step(){
+  if(ci>=CHAT.length||CHAT[ci][0]==='me'){running=false;updateHint();return;}
+  const[w,t]=CHAT[ci];const deliver=()=>{ci++;addBubble(w,t);notify(t);setTimeout(step,1800);};
+  if(isOpen()){const ty=mkRow('a'),tb=document.createElement('div');tb.className='b typing';tb.innerHTML='<i></i><i></i><i></i>';ty.appendChild(tb);chat.appendChild(ty);down();
+    setTimeout(()=>{ty.remove();deliver();},800);}else deliver();}
+function startChat(){if(started||!CHAT.length)return;started=true;running=true;step();}
+toast.onclick=()=>{cm.classList.add('open');unread=0;$('tBadge').style.display='none';toast.classList.remove('show');down();updateHint();};
+function afterChatClose(){if(waitingMe()){$('tBadge').style.display='none';toast.classList.add('show');}}
+winEl.addEventListener('click',e=>{if(e.target.hasAttribute('data-close'))return;
+  if(waitingMe()){const[w,t]=CHAT[ci++];addBubble(w,t);running=true;updateHint();setTimeout(step,900);}});
+
+/* 便條留言板（資料存在 Supabase） */
+const NOTE_COLORS=['#fadadf','#e8f3fd','#ffffff','#fbe5ec','#e3effb','#eee5fb'];
+const DEMO=[{id:1,nick:"小花",body:"什麼時候開始買花呢？",style:0,created_at:"2026-09-12T08:57:00"},{id:2,nick:"路過的人",body:"網站好好看！",style:1,created_at:"2026-09-13T21:10:00"},
+ {id:3,nick:"匿名",body:"每天都會來看一下 ♡",style:3,created_at:"2026-09-14T09:30:00"},{id:4,nick:"星",body:"謝謝你們的故事。",style:5,created_at:"2026-09-15T23:02:00"}];
+let pickStyle=0;
+const sbBase=()=>SB_URL.replace(/\/$/,'')+'/rest/v1/guestbook',sbReady=()=>SB_URL&&SB_KEY;
+function rng(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
+function hash(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+const HEART="M50 90C20 68 4 50 4 30 4 14 16 6 28 6c10 0 18 6 22 14 4-8 12-14 22-14 12 0 24 8 24 24 0 20-16 38-46 60z",STAR="50,3 62,36 97,38 69,59 80,94 50,73 20,94 31,59 3,38 38,36";
+function shapeBg(kind,color){const g=kind==='he'?`<path d='${HEART}'/>`:`<polygon points='${STAR}'/>`;
+  return 'url("data:image/svg+xml,'+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='${color}' stroke='rgba(150,120,190,.3)' stroke-width='1.2' stroke-linejoin='round'>${g}</g></svg>`)+'")';}
+function buildNote(n){
+  const r=rng(Number(n.id)||hash(n.created_at+n.body));
+  const st=(Number.isInteger(n.style)&&n.style>=0&&n.style<NOTE_COLORS.length)?n.style:Math.floor(r()*NOTE_COLORS.length);
+  const nick=(n.nick||'').trim()||'匿名',dt=new Date(n.created_at),time=p2(dt.getMonth()+1)+'-'+p2(dt.getDate())+' '+p2(dt.getHours())+':'+p2(dt.getMinutes());
+  const len=[...String(n.body)].length,lvl=len<=10?0:len<=30?1:len<=70?2:3,base=[112,136,160,184][lvl];
+  const roll=r(),kind=roll<.32?'paper':roll<.48?'sq':roll<.68?'ci':roll<.84?'he':'st';
+  const d=document.createElement('div');d.className='sn s'+st+(kind==='paper'?'':' sh sh-'+kind);
+  let size=Math.round(base*(0.92+r()*0.22));if(kind==='st')size=Math.round(size*1.25);if(kind==='he')size=Math.round(size*1.12);
+  d.style.width=(kind==='paper'?size+14:size)+'px';
+  if(kind!=='paper'){d.style.height=size+'px';const pad={sq:[12,12,12],ci:[.16,.16,.16],he:[.26,.2,.2],st:[.3,.22,.18]}[kind],px=v=>v<1?Math.round(size*v):v;
+    d.style.padding=`${px(pad[0])}px ${px(pad[1])}px ${px(pad[2])}px`;}
+  let lc=[3,4,5,7][lvl];if(kind==='he'||kind==='st')lc=Math.max(2,lc-1);d.style.setProperty('--lc',lc);
+  if(kind==='he'||kind==='st'){d.style.backgroundColor='transparent';d.style.backgroundImage=shapeBg(kind,NOTE_COLORS[st]);}
+  else if(kind!=='paper'){d.style.backgroundColor=NOTE_COLORS[st];d.style.backgroundImage='none';}
+  d.style.margin=`${(r()*14-12).toFixed(0)}px ${(-r()*8).toFixed(0)}px`;d.style.zIndex=1+Math.floor(r()*5);
+  d.style.transform=`translate(${(r()*12-6).toFixed(1)}px,${(r()*8-4).toFixed(1)}px) rotate(${(r()*16-8).toFixed(1)}deg)`;
+  const hd=document.createElement('div');hd.className='hd';const nm=document.createElement('span');nm.className='nm';nm.textContent=nick;
+  const tm=document.createElement('span');tm.className='tm';tm.textContent=time;hd.append(nm,tm);
+  const tx=document.createElement('div');tx.className='tx';tx.textContent=n.body;d.append(hd,tx);
+  d.onclick=()=>{openCard(nick,'',time,'',true);$('cText').textContent=n.body;};return d;}
+function renderWall(rows,msg){const w=$('wall2');w.textContent='';
+  if(msg){const h=document.createElement('div');h.className='hint';h.style.width='100%';h.textContent=msg;w.appendChild(h);}rows.forEach(n=>w.appendChild(buildNote(n)));}
+async function loadNotes(){
+  if(!sbReady()){renderWall(DEMO,'（留言板尚未連接，以下是範例）');return;}
+  renderWall([],'讀取中⋯');
+  try{const r=await fetch(sbBase()+'?select=id,nick,body,style,created_at&order=created_at.desc&limit=60',{headers:{apikey:SB_KEY}});
+    if(!r.ok)throw 0;const rows=await r.json();renderWall(rows,rows.length?'':'還沒有便條，貼第一張吧 ♡');}catch(e){renderWall([],'讀取失敗，請稍後再試');}}
+NOTE_COLORS.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='sw'+(i===0?' on':'');b.style.background=c;
+  b.onclick=()=>{pickStyle=i;[...$('swatches').children].forEach((x,k)=>x.classList.toggle('on',k===i));};$('swatches').appendChild(b);});
+$('fabNote').onclick=()=>{$('noteStatus').textContent='';$('m-note').classList.add('open');};
+$('noteText').oninput=()=>{$('noteCount').textContent=$('noteText').value.length+' / 300';};
+$('noteSend').onclick=async()=>{
+  const msg=$('noteText').value.trim(),nick=$('noteNick').value.trim().slice(0,20),st=$('noteStatus'),btn=$('noteSend');
+  if(!msg){st.textContent='請先寫點什麼';return;}
+  if($('noteHp').value){$('noteText').value='';st.textContent='已貼上，謝謝你 ♡';return;}
+  if(!sbReady()){st.textContent='留言板還沒設定';return;}
+  let last=0;try{last=+localStorage.getItem('noteAt')||0}catch(e){}
+  if(Date.now()-last<30000){st.textContent='請稍等一下再送出';return;}
+  btn.disabled=true;st.textContent='送出中⋯';
+  try{const r=await fetch(sbBase(),{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({body:msg,nick:nick||null,style:pickStyle})});
+    if(!r.ok)throw 0;$('noteText').value='';$('noteCount').textContent='0 / 300';st.textContent='已貼上，謝謝你 ♡';
+    try{localStorage.setItem('noteAt',String(Date.now()))}catch(e){}await loadNotes();}catch(e){st.textContent='送出失敗，請稍後再試';}
+  btn.disabled=false;};
+loadNotes();
+
+/* 音樂：歌名／進度條／上一首 播放 下一首 */
+const au=new Audio();let ti=0,drag=false;
+const PLAY='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',PAUSE='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
+const fmt=s=>{s=isFinite(s)?Math.max(0,Math.floor(s)):0;return Math.floor(s/60)+':'+p2(s%60)};
+function draw(){const d=au.duration,c=au.currentTime||0,ok=isFinite(d)&&d>0;
+  const pc=ok?c/d*100:0;$('pfill').style.width=pc+'%';$('pthumb').style.left=`calc(${pc}% - ${pc/100*14}px)`;$('t1').textContent=fmt(c);$('t2').textContent=fmt(ok?d:0);
+  $('mt').textContent=TRACKS.length?TRACKS[ti].name:'尚未選擇歌曲';$('pp').innerHTML=au.paused?PLAY:PAUSE;}
+function load(i,go){if(!TRACKS.length)return;ti=(i+TRACKS.length)%TRACKS.length;au.src=TRACKS[ti].src;if(go)au.play().catch(()=>{});draw();}
+['timeupdate','play','pause','loadedmetadata','durationchange'].forEach(n=>au.addEventListener(n,draw));au.onended=()=>load(ti+1,true);
+function seek(e){const r=$('pbar').getBoundingClientRect(),p=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));if(isFinite(au.duration))au.currentTime=p*au.duration;draw();}
+$('pbar').onpointerdown=e=>{drag=true;$('pbar').setPointerCapture(e.pointerId);seek(e)};$('pbar').onpointermove=e=>{if(drag)seek(e)};
+$('pbar').onpointerup=$('pbar').onpointercancel=()=>{drag=false};
+$('pv').onclick=()=>load(ti-1,true);$('nx').onclick=()=>load(ti+1,true);
+$('pp').onclick=()=>{if(!TRACKS.length){$('file').click();return;}au.paused?(au.src?au.play().catch(()=>{}):load(0,true)):au.pause();};
+$('imp').onclick=()=>$('file').click();
+$('file').onchange=e=>{const fs=[...e.target.files];if(!fs.length)return;const first=TRACKS.length;
+  fs.forEach(f=>TRACKS.push({name:f.name.replace(/\.[^.]+$/,''),src:URL.createObjectURL(f)}));e.target.value='';load(first,true);};
+if(SPOTIFY){$('spl').href=SPOTIFY;$('spl').hidden=false;}
+$('mpMin').onclick=()=>{const m=$('mp').classList.toggle('min');$('mpMin').textContent=m?'＋':'—';};
+/* 自動讀取 GitHub 倉庫 music 資料夾裡的音檔：之後只要把歌上傳到 music 資料夾，就會自動出現在播放器（檔名＝顯示的歌名） */
+(async()=>{try{
+  const host=location.hostname;if(!host.endsWith('.github.io'))return;
+  const owner=host.split('.')[0],repo=location.pathname.split('/')[1];if(!repo)return;
+  const r=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/music`);if(!r.ok)return;
+  const fs=(await r.json()).filter(f=>f.type==='file'&&/\.(mp3|m4a|aac|wav|ogg|flac)$/i.test(f.name));
+  if(!fs.length)return;fs.sort((a,b)=>a.name.localeCompare(b.name,'zh'));
+  TRACKS.length=0;fs.forEach(f=>TRACKS.push({name:f.name.replace(/\.[^.]+$/,''),src:'music/'+encodeURIComponent(f.name)}));
+  if(au.paused){au.removeAttribute('src');ti=0;}draw();
+}catch(e){}})();
+draw();
+
+/* 小人 */
+const stage=$('stage');
+CHIBIS.forEach((c,i)=>{const el=document.createElement('img');el.className='chibi';el.src=c.img;
+  const bub=document.createElement('div');bub.className='say';bub.textContent=c.say;stage.append(el,bub);
+  let x=30+i*130,dir=1,sp=.4+Math.random()*.3;
+  el.onclick=()=>{bub.style.display='block';setTimeout(()=>bub.style.display='none',1800)};
+  (function step(){const max=innerWidth-(el.width||100);x+=dir*sp;if(x>max||x<0){dir*=-1;x=Math.min(max,Math.max(0,x));}
+    if(Math.random()<.002)dir*=-1;el.style.left=x+'px';bub.style.left=x+'px';el.classList.toggle('flip',dir<0);requestAnimationFrame(step);})();});
+
+/* 圖片轉 ASCII 字元畫（載入畫面用） */
+function asciiDataURL(src,cols,cell,cb){const im=new Image();
+  im.onload=()=>{try{const rows=Math.max(1,Math.round(cols*im.height/im.width)),sc=document.createElement('canvas');sc.width=cols;sc.height=rows;
+    const sx=sc.getContext('2d');sx.drawImage(im,0,0,cols,rows);const d=sx.getImageData(0,0,cols,rows).data;let lo=1,hi=0;const lum=[];
+    for(let i=0;i<d.length;i+=4){const v=(0.299*d[i]+0.587*d[i+1]+0.114*d[i+2])/255;lum.push(v);if(v<lo)lo=v;if(v>hi)hi=v;}
+    const span=Math.max(.15,hi-lo),o=document.createElement('canvas');o.width=cols*cell;o.height=rows*cell;const ox=o.getContext('2d');
+    ox.fillStyle='#fbf6f8';ox.fillRect(0,0,o.width,o.height);ox.fillStyle='#8d5a77';ox.font='bold '+(cell*1.05)+'px "Courier New",monospace';ox.textBaseline='top';
+    const ramp=' .:-=+*#%@';for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const l=Math.min(1,Math.max(0,(lum[y*cols+x]-lo)/span)),
+      ch=ramp[Math.min(ramp.length-1,Math.floor((1-l)*ramp.length))];if(ch!==' ')ox.fillText(ch,x*cell,y*cell);}
+    cb(o.toDataURL('image/png'));}catch(e){cb(null);}};im.onerror=()=>cb(null);im.src=src;}
+
+/* 載入畫面：進度條至少跑 2.6 秒，圖片沒載完就先等（最多 6 秒） */
+(function(){
+  const urls=[...new Set([...document.images].map(i=>i.getAttribute('src')).concat(CARDS.map(c=>c.img),CHIBIS.map(c=>c.img),[AVATAR_A,AVATAR_ME,SHEET.img]))].filter(Boolean);
+  const total=urls.length;let n=0,shown=0,entered=false;const t0=performance.now(),DURATION=2600;
+  const fill=$('fill'),pct=$('pct'),ld=$('loader'),run=$('lRun');
+  if(LOADER_TOP){$('lTop').hidden=false;$('lTop').src=LOADER_TOP;if(LOADER_ASCII)asciiDataURL(LOADER_TOP,48,4,u=>{if(u)$('lTop').src=u;});if(LOADER_TOP_CUT)$('lTop').classList.add('cut');}
+  if(LOADER_RUNNER){run.hidden=false;run.src=LOADER_RUNNER;if(LOADER_RUNNER_CUT)run.classList.add('cut');}
+  [...'LOADING...'].forEach((ch,i)=>{const sp=document.createElement('span');sp.textContent=ch;sp.style.animationDelay=(i*0.09)+'s';$('lTxt').appendChild(sp);});
+  document.body.style.overflow='hidden';setTimeout(()=>{n=total;},6000);
+  urls.forEach(u=>{const im=new Image();im.onload=im.onerror=()=>{n++};im.src=u;});
+  function paint(p){fill.style.width=p+'%';run.style.left=`calc(${p}% - ${p/100*run.offsetWidth}px)`;pct.textContent=Math.round(p)+'%';}
+  function enter(){ld.classList.add('done');document.body.style.overflow='';setTimeout(startChat,3500);
+    if(!TRACKS.length)return;load(0,false);au.play().catch(()=>{addEventListener('pointerdown',()=>{if(au.paused)au.play().catch(()=>{});},{once:true});});}
+  function frame(now){const timeP=Math.min(1,(now-t0)/DURATION),easeP=1-Math.pow(1-timeP,1.6),realP=total?Math.min(1,n/total):1;
+    shown=Math.max(shown,Math.min(easeP,realP)*100);paint(shown);
+    if(shown>=100&&!entered){entered=true;setTimeout(enter,450);return;}requestAnimationFrame(frame);}
+  paint(0);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
