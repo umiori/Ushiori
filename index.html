@@ -19,7 +19,7 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 /* 首頁 */
 .head h1{margin:0 0 8px;font-size:1.3rem;font-weight:700;letter-spacing:.02em}
 .head p{margin:0 auto 22px;font-size:.64rem;line-height:1.8;color:rgba(251,234,241,.85);text-wrap:balance}
-.heart{width:min(370px,100%);margin:6px auto 0}.heart img{width:100%;display:block}
+.heart{width:min(370px,100%);margin:6px auto 0}.heart img{width:100%;display:block;border-radius:16px}
 .card,.pc,.qa,.mini{background:var(--glass);border:1px solid var(--line);border-radius:16px;color:var(--ink)}
 .card{padding:14px 12px;margin-bottom:14px}
 .glass{width:92%;margin:26px auto 0;background:rgba(255,255,255,.26);border-color:rgba(255,255,255,.45)}
@@ -29,6 +29,7 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .divider i{flex:1;height:1px;background:rgba(251,234,241,.5)}.divider b{font-weight:400;font-size:.66rem}
 .since{font-size:.6rem;letter-spacing:.14em;color:rgba(255,255,255,.9)}
 .n{margin:4px 0 0;font-size:1.7rem;color:#fff4f8}
+.warn{margin-top:8px;font-size:.7rem;letter-spacing:.08em;color:rgba(255,255,255,.88)}
 /* 音樂（置中一欄，精簡高度） */
 .mp{position:relative;width:92%;margin:14px auto 0;padding:9px 14px 10px;background:rgba(255,255,255,.2)}
 .mph{position:absolute;left:14px;right:14px;top:9px;height:20px;display:flex;justify-content:space-between;align-items:center;font-size:1rem;line-height:1;pointer-events:none}
@@ -142,10 +143,10 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 #loader.done{opacity:0;visibility:hidden}
 #loader .top{width:min(96px,28vw);aspect-ratio:1/1;object-fit:cover;border-radius:16px;border:2px solid var(--ink);background:rgba(255,255,255,.18)}
 #loader .top.cut{object-fit:contain;border:0;background:none;border-radius:0}
-#loader .trackwrap{position:relative;width:min(136px,40vw);margin-top:28px;padding-top:12px}
+#loader .trackwrap{position:relative;width:min(160px,46vw);margin-top:28px;padding-top:38px}
 #loader .track2{height:9px;border:1.5px solid var(--ink);border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
 #loader .fill{height:100%;width:0;border-radius:99px;background:var(--ink)}
-#loader .runner{position:absolute;top:-1px;left:0;width:20px;height:20px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink);animation:hop .5s ease-in-out infinite alternate}
+#loader .runner{position:absolute;top:0;left:0;width:36px;height:36px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink);animation:hop .5s ease-in-out infinite alternate}
 #loader .runner.cut{object-fit:contain;border:0;border-radius:0}
 @keyframes hop{to{transform:translateY(-5px) rotate(6deg)}}
 #loader .txt{display:flex;margin-top:14px;font-size:.68rem;letter-spacing:.28em;padding-left:.28em}
@@ -166,12 +167,13 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 <div class="wrap">
   <section class="page on" id="p-home">
     <div class="head"><h1>♥ USHIORI ♥</h1><p>静かなる恒星、流れゆく星雲。<br>重力の果てに帰り着き、無限の色彩に永遠を映す。</p></div>
-    <div class="heart"><img src="photo/2.PNG" alt=""></div>
+    <div class="heart"><img src="photo/fm1.jpg" alt=""></div>
     <div class="card glass">
       <h2 class="names"><span id="nameA"></span><i>♡</i><span id="nameB"></span></h2>
       <div class="divider"><span>✦</span><i></i><b>♥</b><i></i><span>✦</span></div>
       <small class="since" id="since"></small>
       <div class="n">D<span id="days"></span></div>
+      <div class="warn">！ooc預警 100%帶入本人！</div>
     </div>
     <div class="card mp" id="mp">
       <div class="mph"><span>♪</span><button id="mpMin" aria-label="收合">—</button></div>
@@ -231,7 +233,7 @@ const CHAT_NAME="大笨牛🐮";
 const AVATAR_A="", AVATAR_ME="";            // 聊天頭貼圖片路徑，留空就用 emoji 🐮 / 🐰
 const SHEET={img:"",title:"角色設定圖"};     // 角色頁大圖，例如 "photo/couple.jpg"
 const LOADER_TOP="", LOADER_TOP_CUT=false, LOADER_ASCII=true; // 載入畫面上方照片（留空＝不顯示）
-const LOADER_RUNNER="", LOADER_RUNNER_CUT=true;               // 進度條上跑的小圖（留空＝不顯示）
+const LOADER_RUNNER="photo/fmtt.PNG", LOADER_RUNNER_CUT=true;               // 進度條上跑的小圖（留空＝不顯示）
 const SPOTIFY="https://open.spotify.com/track/3iBgrkexCzVuPy4O9vx7Mf"; // 不要 Spotify 連結就改成 ""
 const TRACKS=[{name:"Glue Song",src:"music/glue-song.mp3"}]; // 歌曲清單：檔名要跟 music 資料夾裡的一樣；不放音樂就改成 []
 const CHIBIS=[]; // 走路小人，例如 [{img:"photo/chibi1.png",say:"今天也辛苦了"}]
@@ -434,7 +436,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   const total=urls.length;let n=0,shown=0,entered=false;const t0=performance.now(),DURATION=2600;
   const fill=$('fill'),pct=$('pct'),ld=$('loader'),run=$('lRun');
   if(LOADER_TOP){$('lTop').hidden=false;$('lTop').src=LOADER_TOP;if(LOADER_ASCII)asciiDataURL(LOADER_TOP,48,4,u=>{if(u)$('lTop').src=u;});if(LOADER_TOP_CUT)$('lTop').classList.add('cut');}
-  if(LOADER_RUNNER){run.hidden=false;run.src=LOADER_RUNNER;if(LOADER_RUNNER_CUT)run.classList.add('cut');}
+  if(LOADER_RUNNER){run.hidden=false;run.onerror=()=>{run.hidden=true;};run.src=LOADER_RUNNER;if(LOADER_RUNNER_CUT)run.classList.add('cut');}
   [...'LOADING...'].forEach((ch,i)=>{const sp=document.createElement('span');sp.textContent=ch;sp.style.animationDelay=(i*0.09)+'s';$('lTxt').appendChild(sp);});
   document.body.style.overflow='hidden';setTimeout(()=>{n=total;},6000);
   urls.forEach(u=>{const im=new Image();im.onload=im.onerror=()=>{n++};im.src=u;});
