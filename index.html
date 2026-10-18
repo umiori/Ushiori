@@ -50,19 +50,24 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .sheet{border-radius:16px;overflow:hidden;margin-bottom:14px;cursor:pointer;background:transparent}
 .sheet img{width:100%;display:block;max-height:68vh;object-fit:contain}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-.pc{padding:12px 10px}.pc h2{margin:0;font-size:.95rem;font-weight:500;color:#fff4f8}
+.pc{padding:14px 10px 6px}.pc h2{margin:0;font-size:1.1rem;font-weight:600;line-height:1.25;color:#fff4f8}
+.pc .nm2{margin-top:2px;font-size:1.05rem;font-weight:600;line-height:1.25;color:#fff4f8}
+.pc .lines p{margin:0 0 13px;font-size:.88rem;font-weight:500;line-height:1.4;color:#fff}
 .en{margin:2px 0 8px;font-size:.6rem;letter-spacing:.14em;color:rgba(251,234,241,.7)}
-.dots{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
+.dots{display:flex;gap:6px;justify-content:center;margin:10px 0 16px}
 .dots i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.6)}
 .pc dl{margin:0}.pc dt{margin-top:9px;font-size:.58rem;letter-spacing:.12em;color:rgba(251,234,241,.7)}
 .pc dd{margin:1px 0 0;font-size:.82rem;line-height:1.55;color:#fff}
-.mini{margin-top:12px;padding:14px 12px}
+.mini{margin-top:12px;padding:14px 8px}
+.noterow{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px -26px 0}
+.noterow .mini{flex:1;min-width:0;margin-top:0}
+.side{width:80px;flex:0 0 80px;height:auto}.side[hidden]{display:none}
 .mini h3,.qh{margin:0 0 10px;font-size:.62rem;font-weight:400;letter-spacing:.2em;color:#fff4f8}
 .qh{font-size:.7rem;margin:2px 0 14px}
 .mrow{margin-bottom:12px}.mrow:last-child{margin-bottom:0}
 .lab{display:block;margin-bottom:5px;font-size:.6rem;letter-spacing:.08em;color:rgba(251,234,241,.7)}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mini .pair span,.mini .both{background:none;color:#fff;font-weight:600;border-radius:0;padding:6px 10px;font-size:.95rem}.both{display:block}
+.mini .pair span,.mini .both{background:none;color:#fff;font-weight:600;border-radius:0;padding:6px 2px;font-size:.8rem}.both{display:block}
 .qa .pair span{background:#fff;color:var(--deep);border-radius:99px;padding:6px 10px;font-size:.85rem}
 .qa{padding:14px 12px;margin-bottom:12px}.qa h3{margin:0 0 10px;font-size:.82rem;font-weight:500;color:#fff4f8}
 .qa h3 b{margin-right:6px;color:#f3cfe0}.pair .ans{background:#fff;color:var(--deep);border-radius:14px;padding:8px 10px;font-size:.82rem;line-height:1.6}
@@ -196,7 +201,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
   <section class="page" id="p-profile">
     <div class="sheet" id="sheet" hidden><img id="sheetImg" alt=""></div>
     <div class="duo" id="chars"></div>
-    <div class="card mini" id="mini"><h3>✦ COUPLE NOTE ✦</h3></div>
+    <div class="noterow"><img class="side" id="sideL" alt="" hidden><div class="card mini" id="mini"><h3>✦ COUPLE NOTE ✦</h3></div><img class="side" id="sideR" alt="" hidden></div>
   </section>
   <section class="page" id="p-gallery"><div class="grid" id="grid"></div></section>
   <section class="page" id="p-qa"><div class="qh">✦ COUPLE Q&amp;A ✦</div><div id="qaList"></div></section>
@@ -239,9 +244,10 @@ const SPOTIFY="https://open.spotify.com/track/3iBgrkexCzVuPy4O9vx7Mf"; // 不要
 const TRACKS=[{name:"Glue Song",src:"music/glue-song.mp3"}]; // 歌曲清單：檔名要跟 music 資料夾裡的一樣；不放音樂就改成 []
 const CHIBIS=[]; // 走路小人，例如 [{img:"photo/chibi1.png",say:"今天也辛苦了"}]
 const SB_URL="", SB_KEY=""; // 留言板：Supabase 網址與 Publishable key
-const CHARS=[ // 左邊＝第一個，右邊＝第二個
- {name:"Sakurai Uori（我）",en:"HEROINE",colors:["#c9a8d5","#665774","#a07c64"],info:[["生日","2月2日"],["身高","160cm"],["個性","寫幾個關鍵字"],["喜歡","喜歡的東西"],["一句話","自我介紹寫這裡"]]},
- {name:"Ushijima Wakatoshi",en:"HERO",colors:["#5d5e3c","#3e3f1d","#9c8bb7"],info:[["生日","1月1日"],["身高","180cm"],["個性","寫幾個關鍵字"],["喜歡","喜歡的東西"],["一句話","自我介紹寫這裡"]]}];
+const CHARS=[ // 左邊＝第一個，右邊＝第二個；name＝英文名，name2＝漢字名，info＝一行一行的文字
+ {name:"Sakurai Uori",name2:"桜井魚織",colors:["#c9a8d5","#665774","#a07c64"],info:["白鳥澤輕音部幹部","161cm/4Xkg","ENFP","#可愛#活潑#黏人#敏感"]},
+ {name:"Ushijima Wakatoshi",name2:"牛島若利",colors:["#5d5e3c","#3e3f1d","#9c8bb7"],info:["白鳥澤排球隊隊長","189.5cm/85kg","ISTJ","#木訥#呆板#穩定#直率"]}];
+const SIDE_L="photo/uoritt.jpg", SIDE_R="photo/ushitt.jpg"; // 第二頁下方資料欄「左右兩旁」的照片（左＝小魚、右＝牛島），留空就不顯示
 const MINI=[
  {label:"動物型",l:"荷蘭垂耳兔🐰",r:"杜賓犬🐶"},{label:"組名",both:"USHIORI /バカ組"},
  {label:"表符",l:"🐟",r:"🐮"},{label:"代表物",l:"🎤",r:"🏐️"}];
@@ -270,7 +276,8 @@ function openCard(title,img,date,html,pre){$('cTitle').textContent=title;$('cImg
 
 /* 角色、小欄、Q&A、相簿 */
 CHARS.forEach(c=>{const d=document.createElement('div');d.className='pc';
-  d.innerHTML=`<h2>${esc(c.name)}</h2><div class="en">${esc(c.en||'')}</div><div class="dots">${(c.colors||[]).map(k=>`<i style="background:${esc(k)}"></i>`).join('')}</div><dl>${c.info.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`;$('chars').appendChild(d);});
+  d.innerHTML=`<h2>${esc(c.name)}</h2><div class="nm2">${esc(c.name2||'')}</div><div class="dots">${(c.colors||[]).map(k=>`<i style="background:${esc(k)}"></i>`).join('')}</div><div class="lines">${c.info.map(t=>`<p>${esc(t)}</p>`).join('')}</div>`;$('chars').appendChild(d);});
+[['sideL',SIDE_L],['sideR',SIDE_R]].forEach(([id,src])=>{const im=$(id);if(!src)return;im.onload=()=>{im.hidden=false};im.onerror=()=>{im.hidden=true};im.src=src;});
 if(SHEET.img){ /* 依序嘗試常見的副檔名（jpg/JPG/jpeg/png…），找到能載入的第一張就顯示 */
   const im=$('sheetImg'),base=SHEET.img.replace(/\.[^./]+$/,''),first=SHEET.img.split('.').pop(),
         exts=[...new Set([first,'jpg','JPG','jpeg','JPEG','png','PNG','webp'])];let k=0;
