@@ -12,7 +12,7 @@ html{font-size:13px;background:var(--base)}
 html::before{content:"";position:fixed;left:0;top:0;width:100%;height:100lvh;z-index:-1;background:var(--base) url("photo/bg5.PNG") center top/cover no-repeat}
 body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-align:center;
  font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei","Helvetica Neue",Arial,sans-serif;
- padding-bottom:calc(var(--nav) + 110px + env(safe-area-inset-bottom))}
+ padding-bottom:calc(var(--nav) + 8px + env(safe-area-inset-bottom))}
 .wrap{max-width:430px;margin:0 auto;padding:30px 34px 20px}
 .page{display:none}.page.on{display:block;animation:fade .3s}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -270,7 +270,14 @@ function openCard(title,img,date,html,pre){$('cTitle').textContent=title;$('cImg
 /* 角色、小欄、Q&A、相簿 */
 CHARS.forEach(c=>{const d=document.createElement('div');d.className='pc';
   d.innerHTML=`<h2>${esc(c.name)}</h2><div class="en">${esc(c.en||'')}</div><div class="dots">${(c.colors||[]).map(k=>`<i style="background:${esc(k)}"></i>`).join('')}</div><dl>${c.info.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`;$('chars').appendChild(d);});
-if(SHEET.img){$('sheetImg').onerror=()=>{$('sheet').hidden=true;};$('sheet').hidden=false;$('sheetImg').src=SHEET.img;$('sheet').onclick=()=>openCard(SHEET.title,SHEET.img,'','');}
+if(SHEET.img){ /* 依序嘗試常見的副檔名（jpg/JPG/jpeg/png…），找到能載入的第一張就顯示 */
+  const im=$('sheetImg'),base=SHEET.img.replace(/\.[^./]+$/,''),first=SHEET.img.split('.').pop(),
+        exts=[...new Set([first,'jpg','JPG','jpeg','JPEG','png','PNG','webp'])];let k=0;
+  const tryNext=()=>{if(k>=exts.length){$('sheet').hidden=true;return;}im.src=base+'.'+exts[k++];};
+  im.onerror=tryNext;
+  im.onload=()=>{$('sheet').hidden=false;$('sheet').onclick=()=>openCard(SHEET.title,im.src,'','');};
+  tryNext();
+}
 MINI.forEach(m=>{const d=document.createElement('div');d.className='mrow';
   d.innerHTML=`<span class="lab">${esc(m.label)}</span>`+(m.both!=null?`<span class="both">${esc(m.both)}</span>`:`<div class="pair"><span>${esc(m.l)}</span><span>${esc(m.r)}</span></div>`);$('mini').appendChild(d);});
 QA.forEach((x,i)=>{const d=document.createElement('div');d.className='card qa';
