@@ -47,7 +47,7 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .ctl button svg{width:14px;height:14px}
 .lk{display:none!important;border:0;background:none;color:var(--ink);padding:6px 8px;cursor:pointer;font-size:.58rem}
 /* 角色頁 */
-.sheet{border-radius:16px;overflow:hidden;margin-bottom:14px;cursor:pointer;background:#fff}
+.sheet{border-radius:16px;overflow:hidden;margin-bottom:14px;cursor:pointer;background:transparent}
 .sheet img{width:100%;display:block;max-height:68vh;object-fit:contain}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
 .pc{padding:12px 10px}.pc h2{margin:0;font-size:.95rem;font-weight:500;color:#fff4f8}
@@ -154,14 +154,6 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 @keyframes jump{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
 #loader .pct2{font-size:.5rem;letter-spacing:.18em;margin-top:5px;opacity:.7}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.b{opacity:1}}
-/* ===== 不透明版：所有半透明面板改成實色 ===== */
-.card,.pc,.qa,.mini{background:#a193a8}
-.glass{background:#ab9fb2;border-color:rgba(255,255,255,.45)}
-.mp{background:#a799ae}
-nav{background:#a496ab;-webkit-backdrop-filter:none;backdrop-filter:none}
-.fab{background:#a799ae}
-.toast{background:#fffafc}
-.wall{background:#ede1eb}
 </style>
 </head>
 <body>
@@ -239,7 +231,7 @@ const START="2024-02-12";
 const NAME_A="Ushijima Wakatoshi", NAME_B="Sakurai Uori";
 const CHAT_NAME="大笨牛🐮";
 const AVATAR_A="", AVATAR_ME="";            // 聊天頭貼圖片路徑，留空就用 emoji 🐮 / 🐰
-const SHEET={img:"",title:"角色設定圖"};     // 角色頁大圖，例如 "photo/couple.jpg"
+const SHEET={img:"photo/lh.jpg",title:"角色設定圖"};     // 角色頁大圖，例如 "photo/couple.jpg"
 const LOADER_TOP="", LOADER_TOP_CUT=false, LOADER_ASCII=true; // 載入畫面上方照片（留空＝不顯示）
 const LOADER_RUNNER="photo/fmtt.PNG", LOADER_RUNNER_CUT=true;               // 進度條上跑的小圖（留空＝不顯示）
 const SPOTIFY="https://open.spotify.com/track/3iBgrkexCzVuPy4O9vx7Mf"; // 不要 Spotify 連結就改成 ""
@@ -278,7 +270,7 @@ function openCard(title,img,date,html,pre){$('cTitle').textContent=title;$('cImg
 /* 角色、小欄、Q&A、相簿 */
 CHARS.forEach(c=>{const d=document.createElement('div');d.className='pc';
   d.innerHTML=`<h2>${esc(c.name)}</h2><div class="en">${esc(c.en||'')}</div><div class="dots">${(c.colors||[]).map(k=>`<i style="background:${esc(k)}"></i>`).join('')}</div><dl>${c.info.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`;$('chars').appendChild(d);});
-if(SHEET.img){$('sheet').hidden=false;$('sheetImg').src=SHEET.img;$('sheet').onclick=()=>openCard(SHEET.title,SHEET.img,'','');}
+if(SHEET.img){$('sheetImg').onerror=()=>{$('sheet').hidden=true;};$('sheet').hidden=false;$('sheetImg').src=SHEET.img;$('sheet').onclick=()=>openCard(SHEET.title,SHEET.img,'','');}
 MINI.forEach(m=>{const d=document.createElement('div');d.className='mrow';
   d.innerHTML=`<span class="lab">${esc(m.label)}</span>`+(m.both!=null?`<span class="both">${esc(m.both)}</span>`:`<div class="pair"><span>${esc(m.l)}</span><span>${esc(m.r)}</span></div>`);$('mini').appendChild(d);});
 QA.forEach((x,i)=>{const d=document.createElement('div');d.className='card qa';
