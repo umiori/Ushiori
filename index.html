@@ -62,7 +62,8 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .mrow{margin-bottom:12px}.mrow:last-child{margin-bottom:0}
 .lab{display:block;margin-bottom:5px;font-size:.6rem;letter-spacing:.08em;color:rgba(251,234,241,.7)}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.pair span,.both{background:#fff;color:var(--deep);border-radius:99px;padding:6px 10px;font-size:.85rem}.both{display:block}
+.mini .pair span,.mini .both{background:none;color:#fff;font-weight:600;border-radius:0;padding:6px 10px;font-size:.95rem}.both{display:block}
+.qa .pair span{background:#fff;color:var(--deep);border-radius:99px;padding:6px 10px;font-size:.85rem}
 .qa{padding:14px 12px;margin-bottom:12px}.qa h3{margin:0 0 10px;font-size:.82rem;font-weight:500;color:#fff4f8}
 .qa h3 b{margin-right:6px;color:#f3cfe0}.pair .ans{background:#fff;color:var(--deep);border-radius:14px;padding:8px 10px;font-size:.82rem;line-height:1.6}
 .ans:last-child{background:#f6e3ed}.who{display:block;margin-bottom:2px;font-size:.58rem;letter-spacing:.12em;color:#a595c0}
@@ -230,7 +231,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 const START="2024-02-12";
 const NAME_A="Ushijima Wakatoshi", NAME_B="Sakurai Uori";
 const CHAT_NAME="大笨牛🐮";
-const AVATAR_A="", AVATAR_ME="";            // 聊天頭貼圖片路徑，留空就用 emoji 🐮 / 🐰
+const AVATAR_A="photo/ushitt.jpg", AVATAR_ME="photo/uoritt.jpg";            // 聊天頭貼圖片路徑，留空就用 emoji 🐮 / 🐰
 const SHEET={img:"photo/lh.jpg",title:"角色設定圖"};     // 角色頁大圖，例如 "photo/couple.jpg"
 const LOADER_TOP="", LOADER_TOP_CUT=false, LOADER_ASCII=true; // 載入畫面上方照片（留空＝不顯示）
 const LOADER_RUNNER="photo/fmtt.PNG", LOADER_RUNNER_CUT=true;               // 進度條上跑的小圖（留空＝不顯示）
@@ -242,8 +243,8 @@ const CHARS=[ // 左邊＝第一個，右邊＝第二個
  {name:"Sakurai Uori（我）",en:"HEROINE",colors:["#c9a8d5","#665774","#a07c64"],info:[["生日","2月2日"],["身高","160cm"],["個性","寫幾個關鍵字"],["喜歡","喜歡的東西"],["一句話","自我介紹寫這裡"]]},
  {name:"Ushijima Wakatoshi",en:"HERO",colors:["#5d5e3c","#3e3f1d","#9c8bb7"],info:[["生日","1月1日"],["身高","180cm"],["個性","寫幾個關鍵字"],["喜歡","喜歡的東西"],["一句話","自我介紹寫這裡"]]}];
 const MINI=[
- {label:"動物型",l:"🐰 荷蘭垂耳兔",r:"🐶杜賓犬"},{label:"組名",both:"ＵＳＨＩＯＲＩ"},
- {label:"符號",l:"🐮",r:"🐟"},{label:"代表物",l:"🏐️",r:"🎤"}];
+ {label:"動物型",l:"荷蘭垂耳兔🐰",r:"杜賓犬🐶"},{label:"組名",both:"USHIORI /バカ組"},
+ {label:"表符",l:"🐟",r:"🐮"},{label:"代表物",l:"🎤",r:"🏐️"}];
 const CARDS=[ // img 留空＝只顯示文字卡片
  {img:"",title:"第一張卡片",scene:"簡短的一句話，\n可以換行。",date:"2026.01.01",story:"點開後顯示的完整文字寫在這裡。"},
  {img:"",title:"第二張卡片",scene:"另一句說明。",date:"2026.02.14",story:"第二張的完整內容。"},
