@@ -79,7 +79,8 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .hdiv{display:flex;align-items:center;gap:8px;margin:6px 8px 14px;color:rgba(251,234,241,.9);font-size:.75rem}
 .hdiv i{flex:1;height:1px;background:rgba(251,234,241,.5)}
 .pbig .noterow{grid-template-columns:1fr minmax(0,42%) 1fr;margin:0}
-.pbig .side{width:calc(100% + 6px);max-width:100px}
+.pbig .side{width:auto;height:auto;max-width:80px;max-height:108px;justify-self:center}
+.pbig #sideL,.pbig #sideR{justify-self:center}
 .qa .pair span{background:#fff;color:var(--deep);border-radius:99px;padding:6px 10px;font-size:.85rem}
 .qa{padding:14px 12px;margin-bottom:12px}.qa h3{margin:0 0 10px;font-size:.82rem;font-weight:500;color:#fff4f8}
 .qa h3 b{margin-right:6px;color:#f3cfe0}.pair .ans{background:#fff;color:var(--deep);border-radius:14px;padding:8px 10px;font-size:.82rem;line-height:1.6}
@@ -306,7 +307,15 @@ function openCard(title,img,date,html,pre){$('cTitle').textContent=title;$('cImg
 /* 角色、小欄、Q&A、相簿 */
 CHARS.forEach(c=>{const d=document.createElement('div');d.className='pc';
   d.innerHTML=`<h2>${esc(c.name)}</h2><div class="nm2">${esc(c.name2||'')}</div><div class="dots">${(c.colors||[]).map(k=>`<i style="background:${esc(k)}"></i>`).join('')}</div><div class="lines">${c.info.map(t=>`<p>${esc(t)}</p>`).join('')}</div>`;$('chars').appendChild(d);});
-[['sideL',SIDE_L],['sideR',SIDE_R]].forEach(([id,src])=>{const im=$(id);if(!src)return;im.onload=()=>{im.hidden=false};im.onerror=()=>{im.hidden=true};im.src=src;});
+/* 小人圖如果四周有很多透明空白，會先自動裁掉，這樣小人才會放得夠大 */
+function trimmed(src,cb){const i=new Image();i.onload=()=>{try{
+  const nw=i.naturalWidth,nh=i.naturalHeight,s=Math.min(1,500/Math.max(nw,nh)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(nw*s));c.height=Math.max(1,Math.round(nh*s));
+  const g=c.getContext('2d');g.drawImage(i,0,0,c.width,c.height);const d=g.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=-1,y1=-1;
+  for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(d[(y*c.width+x)*4+3]>10){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+  if(x1<0){cb(src);return;}
+  const sx=x0/s,sy=y0/s,sw=(x1-x0+1)/s,sh=(y1-y0+1)/s,k=Math.min(1,420/Math.max(sw,sh)),o=document.createElement('canvas');o.width=Math.max(1,Math.round(sw*k));o.height=Math.max(1,Math.round(sh*k));
+  o.getContext('2d').drawImage(i,sx,sy,sw,sh,0,0,o.width,o.height);cb(o.toDataURL('image/png'));}catch(e){cb(src);}};i.onerror=()=>cb(null);i.src=src;}
+[['sideL',SIDE_L],['sideR',SIDE_R]].forEach(([id,src])=>{const im=$(id);if(!src)return;im.onload=()=>{im.hidden=false};im.onerror=()=>{im.hidden=true};trimmed(src,u=>{if(u)im.src=u;else im.hidden=true;});});
 if(SHEET.img){ /* 依序嘗試常見的副檔名（jpg/JPG/jpeg/png…），找到能載入的第一張就顯示 */
   const im=$('sheetImg'),base=SHEET.img.replace(/\.[^./]+$/,''),first=SHEET.img.split('.').pop(),
         exts=[...new Set([first,'jpg','JPG','jpeg','JPEG','png','PNG','webp'])];let k=0;
