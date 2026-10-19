@@ -58,17 +58,27 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .dots i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.6)}
 .pc dl{margin:0}.pc dt{margin-top:9px;font-size:.58rem;letter-spacing:.12em;color:rgba(251,234,241,.7)}
 .pc dd{margin:1px 0 0;font-size:.82rem;line-height:1.55;color:#fff}
-.mini{margin-top:12px;padding:14px 8px}
-.noterow{display:grid;grid-template-columns:1fr minmax(0,56%) 1fr;align-items:center;margin:12px -26px 0}
+.mini{margin-top:12px;padding:8px 6px}
+.noterow{display:grid;grid-template-columns:1fr minmax(0,38%) 1fr;align-items:center;margin:12px -26px 0}
 .noterow .mini{grid-column:2;margin-top:0;min-width:0}
 #sideL{grid-column:1}#sideR{grid-column:3}
-.side{justify-self:center;width:88%;max-width:92px;height:auto}.side[hidden]{display:none}
+.side{justify-self:center;width:88%;max-width:92px;height:auto}#sideL{justify-self:end}#sideR{justify-self:start}.side[hidden]{display:none}
 .mini h3,.qh{margin:0 0 10px;font-size:.62rem;font-weight:400;letter-spacing:.2em;color:#fff4f8}
 .qh{font-size:.7rem;margin:2px 0 14px}
 .mrow{margin-bottom:12px}.mrow:last-child{margin-bottom:0}
 .lab{display:block;margin-bottom:5px;font-size:.6rem;letter-spacing:.08em;color:rgba(251,234,241,.7)}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mini .pair span,.mini .both{background:none;color:#fff;font-weight:600;border-radius:0;padding:6px 2px;font-size:.8rem}.both{display:block}
+.mini .pair span,.mini .both{background:none;color:#fff;font-weight:600;border-radius:0;padding:2px 1px;font-size:.68rem}
+.mini h3{margin:0 0 4px;font-size:.5rem;letter-spacing:.12em}
+.mini .mrow{margin-bottom:4px}.mini .mrow:last-child{margin-bottom:0}
+.mini .lab{margin-bottom:1px;font-size:.5rem}.both{display:block}
+/* 第二頁：兩張角色卡共用一個大格子，中間用愛心分隔線，下面是情侶筆記與兩旁的小人 */
+.pbig{padding:18px 8px 14px;margin-bottom:0}
+.pbig .pc{background:none;border:0;padding:0}
+.pbig .mini{background:none;border:0;padding:0;margin:0}
+.hdiv{display:flex;align-items:center;gap:8px;margin:6px 8px 14px;color:rgba(251,234,241,.9);font-size:.75rem}
+.hdiv i{flex:1;height:1px;background:rgba(251,234,241,.5)}
+.pbig .noterow{grid-template-columns:1fr minmax(0,46%) 1fr;margin:0}
 .qa .pair span{background:#fff;color:var(--deep);border-radius:99px;padding:6px 10px;font-size:.85rem}
 .qa{padding:14px 12px;margin-bottom:12px}.qa h3{margin:0 0 10px;font-size:.82rem;font-weight:500;color:#fff4f8}
 .qa h3 b{margin-right:6px;color:#f3cfe0}.pair .ans{background:#fff;color:var(--deep);border-radius:14px;padding:8px 10px;font-size:.82rem;line-height:1.6}
@@ -88,6 +98,13 @@ nav button svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width
 nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 .fab{position:fixed;right:14px;z-index:25;width:38px;height:38px;border-radius:50%;font-size:.9rem;cursor:pointer;color:#fff;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4)}
 #fabNote{bottom:calc(var(--nav) + 24px + env(safe-area-inset-bottom))}
+#fabGame{bottom:calc(var(--nav) + 70px + env(safe-area-inset-bottom))}
+.gwrap{position:relative;padding:8px}
+#gcv{display:block;margin:0 auto;border-radius:12px;touch-action:none;background:#cdb9e0}
+.ghudrow{display:flex;align-items:center;gap:10px;padding:2px 4px 8px;font-size:.85rem}
+.gprog{flex:1;height:6px;border-radius:99px;background:rgba(91,67,88,.15);overflow:hidden}.gprog i{display:block;height:100%;width:0;background:#c98fb3;border-radius:99px}
+.gov{position:absolute;left:8px;right:8px;top:36px;bottom:8px;border-radius:12px;background:rgba(70,40,90,.6);display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;color:#fff;text-align:center;font-size:1rem;line-height:1.7}
+.gov small{font-size:.75rem;opacity:.8}
 .btn{border:0;background:#fbeaf1;color:#7a5a82;border-radius:99px;padding:8px 16px;font-family:inherit;cursor:pointer;margin-top:8px}
 /* 通知與彈窗 */
 .toast{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translate(-50%,-140%);width:calc(100% - 28px);max-width:380px;z-index:70;background:rgba(255,250,252,.97);color:var(--deep);
@@ -201,8 +218,11 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 
   <section class="page" id="p-profile">
     <div class="sheet" id="sheet" hidden><img id="sheetImg" alt=""></div>
-    <div class="duo" id="chars"></div>
-    <div class="noterow"><img class="side" id="sideL" alt="" hidden><div class="card mini" id="mini"><h3>✦ COUPLE NOTE ✦</h3></div><img class="side" id="sideR" alt="" hidden></div>
+    <div class="card pbig">
+      <div class="duo" id="chars"></div>
+      <div class="hdiv"><span>❤︎</span><i></i><span>❤︎</span></div>
+      <div class="noterow"><img class="side" id="sideL" alt="" hidden><div class="card mini" id="mini"><h3>✦ COUPLE NOTE ✦</h3></div><img class="side" id="sideR" alt="" hidden></div>
+    </div>
   </section>
   <section class="page" id="p-gallery"><div class="grid" id="grid"></div></section>
   <section class="page" id="p-qa"><div class="qh">✦ COUPLE Q&amp;A ✦</div><div id="qaList"></div></section>
@@ -210,6 +230,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 
 <div class="toast" id="toast"><span id="tAv" style="flex:0 0 auto;width:auto"></span><div style="flex:1;min-width:0"><b id="tName"></b><span id="tText"></span></div><i id="tBadge"></i></div>
 <button class="fab" id="fabNote" title="匿名留言">💌</button>
+<button class="fab" id="fabGame" title="小遊戲">🎮</button>
 <div class="stage" id="stage"></div>
 
 <nav>
@@ -232,6 +253,11 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
   <div class="noteRow"><span id="noteCount">0 / 300</span><button class="btn" id="noteSend">貼上去</button></div>
   <div class="hint" id="noteStatus"></div><div class="wall" id="wall2" style="margin-top:10px"></div></div></div></div>
 
+<div class="modal" id="m-game"><div class="win"><div class="bar"><span>接住你 ♡</span><button data-close>✕</button></div>
+ <div class="gwrap"><div class="ghudrow"><span id="ghud"></span><div class="gprog"><i id="gbar"></i></div></div>
+  <canvas id="gcv"></canvas>
+  <div class="gov" id="gov"><div id="govT"></div><button class="btn" id="govB">開始</button></div></div></div></div>
+
 <script>
 /* ===== 你要改的設定（圖片路徑留空 "" 就不會顯示） ===== */
 const START="2024-02-12";
@@ -248,9 +274,10 @@ const SB_URL="", SB_KEY=""; // 留言板：Supabase 網址與 Publishable key
 const CHARS=[ // 左邊＝第一個，右邊＝第二個；name＝英文名，name2＝漢字名，info＝一行一行的文字
  {name:"Sakurai Uori",name2:"桜井魚織",colors:["#c9a8d5","#665774","#a07c64"],info:["白鳥澤輕音部幹部","161cm/4Xkg","ENFP","#可愛#活潑#黏人#敏感"]},
  {name:"Ushijima Wakatoshi",name2:"牛島若利",colors:["#5d5e3c","#3e3f1d","#9c8bb7"],info:["白鳥澤排球隊隊長","189.5cm/85kg","ISTJ","#木訥#呆板#穩定#直率"]}];
-const SIDE_L="photo/sqyu.PNG", SIDE_R="photo/squshi.PNG"; // 第二頁下方資料欄「左右兩旁」的照片（左＝小魚、右＝牛島），留空就不顯示
+const GAME_BG="photo/yxbg.jpg"; // 小遊戲的長條背景圖（690×3534），找不到圖時會用漸層色，想換圖就改這裡的檔名
+const SIDE_L="photo/uoritt.jpg", SIDE_R="photo/ushitt.jpg"; // 第二頁下方資料欄「左右兩旁」的照片（左＝小魚、右＝牛島），留空就不顯示
 const MINI=[
- {label:"動物型",l:"荷蘭垂耳兔🐰",r:"杜賓犬🐶"},{label:"組名",both:"USHIORI /バカ組"},
+ {label:"組名",both:"USHIORI /バカ組"},{label:"動物型",l:"荷蘭垂耳兔🐰",r:"杜賓犬🐶"},
  {label:"表符",l:"🐟",r:"🐮"},{label:"代表物",l:"🎤",r:"🏐️"}];
 const CARDS=[ // img 留空＝只顯示文字卡片
  {img:"",title:"第一張卡片",scene:"簡短的一句話，\n可以換行。",date:"2026.01.01",story:"點開後顯示的完整文字寫在這裡。"},
@@ -463,6 +490,94 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
     shown=Math.max(shown,Math.min(easeP,realP)*100);paint(shown);
     if(shown>=100&&!entered){entered=true;setTimeout(enter,450);return;}requestAnimationFrame(frame);}
   paint(0);requestAnimationFrame(frame);
+})();
+</script>
+<script>
+/* 接住你 ♡：小魚從空中掉下來，躲開障礙物，最後落進牛島的懷裡 */
+(function(){
+  const $=id=>document.getElementById(id);
+  const cv=$('gcv'),ctx=cv.getContext('2d'),W=300,H=420,dpr=Math.min(2,window.devicePixelRatio||1);
+  cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
+  const modal=$('m-game'),ov=$('gov'),ovT=$('govT'),ovB=$('govB'),hud=$('ghud'),bar=$('gbar');
+  const mk=(src,emoji)=>{const o={img:null,emoji};if(src){const i=new Image();i.onload=()=>{o.img=i};i.src=src;}return o;};
+  const ME=mk(typeof AVATAR_ME!=='undefined'?AVATAR_ME:'','🐟'), HIM=mk(typeof AVATAR_A!=='undefined'?AVATAR_A:'','🐮');
+  const BG={img:null};{const i=new Image();i.onload=()=>{BG.img=i};i.src=(typeof GAME_BG!=='undefined'?GAME_BG:'');}
+  const LEN=2600,PR=15,GY=H-34,TYPES=[{e:'🏐',r:15,amp:0},{e:'🐦',r:14,amp:28},{e:'☁️',r:20,amp:14},{e:'⚡',r:14,amp:0}];
+  let st='idle',raf=0,last=0,x=W/2,tx=W/2,py=90,dist=0,lives=3,inv=0,obs=[],spawn=0,phase='fall',ux=W/2,parts=[],t0=0,tEnd=0;
+
+  function bgRate(){if(BG.img){const ih=BG.img.height*W/BG.img.width;return Math.max(0,ih-H)/LEN;}return .43;} // 背景捲動速度（牛島跟背景一起升起）
+  function setHud(){hud.textContent='❤️'.repeat(Math.max(0,lives))+'🤍'.repeat(Math.max(0,3-lives));bar.style.width=Math.min(100,dist/LEN*100)+'%';}
+  function reset(){x=tx=W/2;py=90;dist=0;lives=3;inv=0;obs=[];spawn=0;phase='fall';ux=50+Math.random()*(W-100);parts=[];setHud();}
+  function show(t,b){ovT.innerHTML=t;ovB.textContent=b;ov.style.display='flex';}
+  function start(){reset();st='play';ov.style.display='none';t0=performance.now();}
+  function addObs(){const t=TYPES[Math.floor(Math.random()*TYPES.length)],bx=22+Math.random()*(W-44);
+    obs.push({e:t.e,r:t.r,amp:t.amp,bx,x:bx,y:H+24,t:Math.random()*6});}
+  function burst(cx,cy,n,em){for(let i=0;i<n;i++)parts.push({x:cx,y:cy,vx:(Math.random()-.5)*120,vy:-30-Math.random()*90,l:1,e:em});}
+  function miss(){lives--;inv=1.4;setHud();if(lives<=0){st='lose';show('掉得太遠了⋯<br>再試一次吧','再玩一次');}}
+
+  function update(dt){
+    const sp=110+Math.min(90,dist/LEN*90);
+    x+=(tx-x)*Math.min(1,dt*10);inv=Math.max(0,inv-dt);
+    if(phase==='fall'){
+      dist+=sp*dt;spawn-=sp*dt;
+      if(spawn<=0){spawn=75+Math.random()*60-dist/LEN*28;addObs();}
+      if(dist>=LEN){dist=LEN;phase='land';}
+    }else{
+      py+=Math.min(140,60+(py-90)*.5)*dt;
+      if(py>=GY-52){
+        if(Math.abs(x-ux)<=40){st='win';tEnd=performance.now();py=GY-46;burst(ux,GY-50,22,'💗');
+          show('接住了 ♡<br><small>用時 '+((tEnd-t0)/1000).toFixed(1)+' 秒</small>','再玩一次');}
+        else{burst(x,GY-20,6,'💦');lives--;setHud();if(lives<=0){st='lose';show('沒有接到⋯<br>再試一次吧','再玩一次');}
+          else{py=90;}}
+      }
+    }
+    obs.forEach(o=>{o.y-=sp*dt;o.x=o.bx+Math.sin(o.t+dist/60)*o.amp;});
+    obs=obs.filter(o=>o.y>-30);
+    if(inv<=0)for(const o of obs){const dx=x-o.x,dy=py-o.y,rr=(PR+o.r)*.78;
+      if(dx*dx+dy*dy<rr*rr){obs=obs.filter(q=>q!==o);burst(o.x,o.y,5,'✨');miss();break;}}
+    parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=160*dt;p.l-=dt*.9;});parts=parts.filter(p=>p.l>0);
+    bar.style.width=Math.min(100,dist/LEN*100)+'%';
+  }
+
+  function avatar(o,cx,cy,r,ring){
+    ctx.save();ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.closePath();ctx.fillStyle='#eadff0';ctx.fill();
+    if(o.img){ctx.clip();ctx.drawImage(o.img,cx-r,cy-r,r*2,r*2);}
+    else{ctx.font=Math.round(r*1.3)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';ctx.fillText(o.emoji,cx,cy+1);}
+    ctx.restore();ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.lineWidth=2.5;ctx.strokeStyle=ring;ctx.stroke();
+  }
+  function emoji(e,cx,cy,size,a){ctx.save();ctx.globalAlpha=a==null?1:a;ctx.font=size+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';ctx.fillText(e,cx,cy);ctx.restore();}
+
+  function draw(ts){
+    if(BG.img){const s=W/BG.img.width,ih=BG.img.height*s,off=Math.min(1,dist/LEN)*Math.max(0,ih-H);
+      ctx.drawImage(BG.img,0,-off,W,ih);
+    }else{
+    const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#a894cc');g.addColorStop(1,'#f3d6e6');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    for(let i=0;i<7;i++){const cy=((i*97-dist*.5)%(H+60)+H+60)%(H+60)-30,cx=(i*83+30)%W;
+      ctx.fillStyle='rgba(255,255,255,.16)';ctx.beginPath();ctx.arc(cx,cy,16,0,7);ctx.arc(cx+16,cy+4,12,0,7);ctx.arc(cx-15,cy+5,11,0,7);ctx.fill();}
+    }
+    const uy=GY+Math.max(0,LEN-dist)*bgRate();
+    if(uy<H+70){ // 牛島跟著鏡頭往下，慢慢從畫面下方出現，雙手張開
+      ctx.strokeStyle='#fbeaf1';ctx.lineWidth=6;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(ux-16,uy-4);ctx.quadraticCurveTo(ux-40,uy-8,ux-36,uy-42);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ux+16,uy-4);ctx.quadraticCurveTo(ux+40,uy-8,ux+36,uy-42);ctx.stroke();
+      avatar(HIM,ux,uy-14,22,'#fff');
+      ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillRect(0,uy+14,W,Math.max(0,H-uy-14));
+    }
+    obs.forEach(o=>emoji(o.e,o.x,o.y,o.r*2));
+    if(!(inv>0&&Math.floor(ts*12)%2))avatar(ME,x,py,PR,'#fff');
+    parts.forEach(p=>emoji(p.e,p.x,p.y,16,Math.max(0,p.l)));
+  }
+  function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.033,(now-last)/1000||0);last=now;if(st==='play')update(dt);draw(now/1000);}
+
+  function size(){const w=Math.min(modal.querySelector('.win').clientWidth-16,innerHeight*.62*W/H);cv.style.width=w+'px';cv.style.height=(w*H/W)+'px';}
+  function open(){modal.classList.add('open');size();reset();st='idle';show('躲開障礙物<br>落進牛島的懷裡 ♡<br><small>手指左右拖曳移動</small>','開始');if(!raf){last=performance.now();raf=requestAnimationFrame(loop);}}
+  $('fabGame').onclick=open;ovB.onclick=start;
+  new MutationObserver(()=>{if(!modal.classList.contains('open')){cancelAnimationFrame(raf);raf=0;st='idle';}}).observe(modal,{attributes:true,attributeFilter:['class']});
+  const setX=e=>{const r=cv.getBoundingClientRect();tx=Math.min(W-PR,Math.max(PR,(e.clientX-r.left)/r.width*W));};
+  cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);setX(e);});
+  cv.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')setX(e);});
+  addEventListener('keydown',e=>{if(!modal.classList.contains('open'))return;
+    if(e.key==='ArrowLeft')tx=Math.max(PR,tx-34);if(e.key==='ArrowRight')tx=Math.min(W-PR,tx+34);});
 })();
 </script>
 </body>
