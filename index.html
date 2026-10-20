@@ -138,7 +138,25 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 #swatches{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
 .sw{width:36px;height:36px;border-radius:9px;border:2.5px solid transparent;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}.sw.on{border-color:var(--deep)}
 .noteRow{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;margin-top:6px}
-.wall{border:1px solid rgba(163,130,172,.3);border-radius:18px;padding:16px 8px 22px;min-height:150px;background:rgba(163,130,172,.16);display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:8px 2px}
+.wall{position:relative;border:8px solid #8e87a6;outline:3px solid rgba(255,255,255,.85);border-radius:22px;padding:24px 8px 26px;min-height:240px;background:radial-gradient(circle,#c9c1da 2.8px,transparent 3.4px) 0 0/22px 22px,#ece8f4;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:10px 4px;box-shadow:inset 0 2px 8px rgba(70,50,100,.14)}
+#m-note .win{max-width:440px}
+.photorow{display:flex;align-items:center;gap:8px;margin:4px 0}
+#photoPrev{width:100%;max-height:170px;object-fit:cover;border-radius:10px;margin:6px 0}
+/* 洞洞板上的便條、拍立得 */
+.pn{position:relative;padding:22px 10px 10px;background:var(--c,#fff);color:#5a4b63;box-shadow:0 3px 7px rgba(60,40,90,.28);cursor:pointer;text-align:center;word-break:break-word;font-size:.8rem;line-height:1.5}
+.pn::before{content:"";position:absolute;top:6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;border:3px solid #7d7794;background:#ece8f4}
+.pn:hover{z-index:20!important}
+.pn .hd{display:flex;justify-content:center;gap:5px;margin-bottom:3px;font-size:.55rem;color:#a090ae}
+.pn .nm{font-weight:700;color:#6b5a78;max-width:6em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pn .tx{white-space:pre-wrap;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lc,6);overflow:hidden}
+.pn-paper{border-radius:3px}
+.pn-tag{border-radius:16px 16px 6px 6px;border:2px solid rgba(70,60,100,.35)}
+.pn-ticket{border-radius:6px;border-left:4px dotted rgba(70,60,100,.3);border-right:4px dotted rgba(70,60,100,.3)}
+.pn-card{border-radius:3px;background:var(--c,#fff) repeating-linear-gradient(transparent 0 21px,rgba(70,60,100,.1) 21px 22px);line-height:22px}
+.pn-polaroid{background:#fff;padding:22px 7px 8px;border-radius:3px}
+.pn-polaroid img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#ddd;margin:0}
+.pn-polaroid .cap{padding-top:6px}
+.pn-polaroid::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--c,#eee)}
 .sn{position:relative;padding:11px 12px 13px;box-shadow:0 3px 8px rgba(120,100,150,.2);font-size:.82rem;line-height:1.6;color:#5a4b63;word-break:break-word;cursor:pointer;text-align:center}
 .sn:hover{transform:none!important;z-index:20!important}
 .sn .hd{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;font-size:.5rem;color:#a090ae}
@@ -250,6 +268,8 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
  <div class="body">
   <input id="noteNick" type="text" maxlength="20" placeholder="NAME" autocomplete="off">
   <textarea id="noteText" maxlength="300" placeholder="寫下想說的話⋯"></textarea>
+  <div class="photorow"><button type="button" class="btn" id="photoBtn">＋ 附上照片</button><span class="hint" id="photoName"></span></div>
+  <img id="photoPrev" alt="" hidden><input type="file" id="photoFile" accept="image/*" hidden>
   <div class="hint" style="text-align:left;padding:2px 0">選一種便條紙</div><div id="swatches"></div>
   <input id="noteHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
   <div class="noteRow"><span id="noteCount">0 / 300</span><button class="btn" id="noteSend">貼上去</button></div>
@@ -272,7 +292,7 @@ const LOADER_RUNNER="photo/fmtt.PNG", LOADER_RUNNER_CUT=true;               // �
 const SPOTIFY="https://open.spotify.com/track/3iBgrkexCzVuPy4O9vx7Mf"; // 不要 Spotify 連結就改成 ""
 const TRACKS=[{name:"Glue Song",src:"music/glue-song.mp3"}]; // 歌曲清單：檔名要跟 music 資料夾裡的一樣；不放音樂就改成 []
 const CHIBIS=[]; // 走路小人，例如 [{img:"photo/chibi1.png",say:"今天也辛苦了"}]
-const SB_URL="", SB_KEY=""; // 留言板：Supabase 網址與 Publishable key
+const SB_URL="https://altswikxclrutwktcxpz.supabase.co", SB_KEY="sb_publishable_ETuWjstVAX11VK_zbMcEbg_2ee7IYO5"; // 留言板：Supabase 網址與 Publishable key
 const CHARS=[ // 左邊＝第一個，右邊＝第二個；name＝英文名，name2＝漢字名，info＝一行一行的文字
  {name:"Sakurai Uori",name2:"桜井魚織",colors:["#c9a8d5","#665774","#a07c64"],info:["白鳥澤輕音部幹部","161cm/4Xkg","ENFP","#可愛#活潑#黏人#敏感"]},
  {name:"Ushijima Wakatoshi",name2:"牛島若利",colors:["#5d5e3c","#3e3f1d","#9c8bb7"],info:["白鳥澤排球隊隊長","189.5cm/85kg","ISTJ","#木訥#呆板#穩定#直率"]}];
@@ -375,37 +395,57 @@ function hash(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h
 const HEART="M50 90C20 68 4 50 4 30 4 14 16 6 28 6c10 0 18 6 22 14 4-8 12-14 22-14 12 0 24 8 24 24 0 20-16 38-46 60z",STAR="50,3 62,36 97,38 69,59 80,94 50,73 20,94 31,59 3,38 38,36";
 function shapeBg(kind,color){const g=kind==='he'?`<path d='${HEART}'/>`:`<polygon points='${STAR}'/>`;
   return 'url("data:image/svg+xml,'+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='${color}' stroke='rgba(150,120,190,.3)' stroke-width='1.2' stroke-linejoin='round'>${g}</g></svg>`)+'")';}
+const PHOTO_RE=/^[A-Za-z0-9_-]{6,60}\.(jpg|png|webp)$/;
+const photoURL=f=>PHOTO_RE.test(f||'')?SB_URL.replace(/\/$/,'')+'/storage/v1/object/public/guestbook-photos/'+f:'';
 function buildNote(n){
   const r=rng(Number(n.id)||hash(n.created_at+n.body));
   const st=(Number.isInteger(n.style)&&n.style>=0&&n.style<NOTE_COLORS.length)?n.style:Math.floor(r()*NOTE_COLORS.length);
   const nick=(n.nick||'').trim()||'匿名',dt=new Date(n.created_at),time=p2(dt.getMonth()+1)+'-'+p2(dt.getDate())+' '+p2(dt.getHours())+':'+p2(dt.getMinutes());
-  const len=[...String(n.body)].length,lvl=len<=10?0:len<=30?1:len<=70?2:3,base=[112,136,160,184][lvl];
-  const roll=r(),kind=roll<.32?'paper':roll<.48?'sq':roll<.68?'ci':roll<.84?'he':'st';
-  const d=document.createElement('div');d.className='sn s'+st+(kind==='paper'?'':' sh sh-'+kind);
-  let size=Math.round(base*(0.92+r()*0.22));if(kind==='st')size=Math.round(size*1.25);if(kind==='he')size=Math.round(size*1.12);
-  d.style.width=(kind==='paper'?size+14:size)+'px';
-  if(kind!=='paper'){d.style.height=size+'px';const pad={sq:[12,12,12],ci:[.16,.16,.16],he:[.26,.2,.2],st:[.3,.22,.18]}[kind],px=v=>v<1?Math.round(size*v):v;
-    d.style.padding=`${px(pad[0])}px ${px(pad[1])}px ${px(pad[2])}px`;}
-  let lc=[3,4,5,7][lvl];if(kind==='he'||kind==='st')lc=Math.max(2,lc-1);d.style.setProperty('--lc',lc);
-  if(kind==='he'||kind==='st'){d.style.backgroundColor='transparent';d.style.backgroundImage=shapeBg(kind,NOTE_COLORS[st]);}
-  else if(kind!=='paper'){d.style.backgroundColor=NOTE_COLORS[st];d.style.backgroundImage='none';}
-  d.style.margin=`${(r()*14-12).toFixed(0)}px ${(-r()*8).toFixed(0)}px`;d.style.zIndex=1+Math.floor(r()*5);
-  d.style.transform=`translate(${(r()*12-6).toFixed(1)}px,${(r()*8-4).toFixed(1)}px) rotate(${(r()*16-8).toFixed(1)}deg)`;
+  const ph=photoURL(n.photo),len=[...String(n.body)].length,lvl=len<=10?0:len<=30?1:len<=70?2:3;
+  const kind=ph?'polaroid':['paper','tag','ticket','card'][Math.floor(r()*4)];
+  const d=document.createElement('div');d.className='pn pn-'+kind;d.style.setProperty('--c',NOTE_COLORS[st]);
+  d.style.width=(ph?[116,124,132][Math.floor(r()*3)]:[104,122,140,158][lvl])+'px';
+  d.style.setProperty('--lc',ph?2:[3,4,6,8][lvl]);
+  d.style.margin=`${(r()*10-2).toFixed(0)}px ${(r()*8-3).toFixed(0)}px`;d.style.zIndex=1+Math.floor(r()*5);
+  d.style.transform=`rotate(${(r()*12-6).toFixed(1)}deg)`;
   const hd=document.createElement('div');hd.className='hd';const nm=document.createElement('span');nm.className='nm';nm.textContent=nick;
-  const tm=document.createElement('span');tm.className='tm';tm.textContent=time;hd.append(nm,tm);
-  const tx=document.createElement('div');tx.className='tx';tx.textContent=n.body;d.append(hd,tx);
-  d.onclick=()=>{openCard(nick,'',time,'',true);$('cText').textContent=n.body;};return d;}
+  const tm=document.createElement('span');tm.textContent=time;hd.append(nm,tm);
+  const tx=document.createElement('div');tx.className='tx';tx.textContent=n.body;
+  if(ph){const im=document.createElement('img');im.loading='lazy';im.alt='';im.src=ph;im.onerror=()=>{im.style.display='none'};
+    const cap=document.createElement('div');cap.className='cap';cap.append(hd,tx);d.append(im,cap);}
+  else d.append(hd,tx);
+  d.onclick=()=>{openCard(nick,ph,time,'',true);$('cText').textContent=n.body;};
+  return d;
+}
 function renderWall(rows,msg){const w=$('wall2');w.textContent='';
   if(msg){const h=document.createElement('div');h.className='hint';h.style.width='100%';h.textContent=msg;w.appendChild(h);}rows.forEach(n=>w.appendChild(buildNote(n)));}
 async function loadNotes(){
   if(!sbReady()){renderWall(DEMO,'（留言板尚未連接，以下是範例）');return;}
   renderWall([],'讀取中⋯');
-  try{const r=await fetch(sbBase()+'?select=id,nick,body,style,created_at&order=created_at.desc&limit=60',{headers:{apikey:SB_KEY}});
-    if(!r.ok)throw 0;const rows=await r.json();renderWall(rows,rows.length?'':'還沒有便條，貼第一張吧 ♡');}catch(e){renderWall([],'讀取失敗，請稍後再試');}}
+  const q=cols=>fetch(sbBase()+'?select='+cols+'&order=created_at.desc&limit=60',{headers:{apikey:SB_KEY}});
+  try{let r=await q('id,nick,body,style,created_at,photo');if(!r.ok)r=await q('id,nick,body,style,created_at');
+    if(!r.ok)throw 0;const rows=await r.json();renderWall(rows,rows.length?'':'洞洞板還是空的，貼第一張吧 ♡');}catch(e){renderWall([],'讀取失敗，請稍後再試');}}
 NOTE_COLORS.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='sw'+(i===0?' on':'');b.style.background=c;
   b.onclick=()=>{pickStyle=i;[...$('swatches').children].forEach((x,k)=>x.classList.toggle('on',k===i));};$('swatches').appendChild(b);});
 $('fabNote').onclick=()=>{$('noteStatus').textContent='';$('m-note').classList.add('open');};
 $('noteText').oninput=()=>{$('noteCount').textContent=$('noteText').value.length+' / 300';};
+let photoBlob=null;
+function resizeImg(file,max,q){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();
+  i.onload=()=>{const s=Math.min(1,max/Math.max(i.naturalWidth,i.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(i.naturalWidth*s));c.height=Math.max(1,Math.round(i.naturalHeight*s));
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(),'image/jpeg',q);};
+  i.onerror=()=>rej();i.src=u;});}
+async function uploadPhoto(blob){
+  const name=(window.crypto&&crypto.randomUUID?crypto.randomUUID().replace(/-/g,''):Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,24)+'.jpg';
+  const url=SB_URL.replace(/\/$/,'')+'/storage/v1/object/guestbook-photos/'+name;
+  for(const extra of [{},{Authorization:'Bearer '+SB_KEY}]){
+    const r=await fetch(url,{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'image/jpeg',...extra},body:blob});if(r.ok)return name;}
+  throw 0;}
+function clearPhoto(){photoBlob=null;$('photoPrev').hidden=true;$('photoBtn').textContent='＋ 附上照片';$('photoName').textContent='';}
+$('photoBtn').onclick=()=>{if(photoBlob)clearPhoto();else $('photoFile').click();};
+$('photoFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{photoBlob=await resizeImg(f,900,.82);$('photoPrev').src=URL.createObjectURL(photoBlob);$('photoPrev').hidden=false;
+    $('photoBtn').textContent='✕ 移除照片';$('photoName').textContent=Math.round(photoBlob.size/1024)+' KB';$('noteStatus').textContent='';}
+  catch(err){clearPhoto();$('noteStatus').textContent='這張照片讀不出來，換一張試試';}};
 $('noteSend').onclick=async()=>{
   const msg=$('noteText').value.trim(),nick=$('noteNick').value.trim().slice(0,20),st=$('noteStatus'),btn=$('noteSend');
   if(!msg){st.textContent='請先寫點什麼';return;}
@@ -413,9 +453,12 @@ $('noteSend').onclick=async()=>{
   if(!sbReady()){st.textContent='留言板還沒設定';return;}
   let last=0;try{last=+localStorage.getItem('noteAt')||0}catch(e){}
   if(Date.now()-last<30000){st.textContent='請稍等一下再送出';return;}
-  btn.disabled=true;st.textContent='送出中⋯';
-  try{const r=await fetch(sbBase(),{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({body:msg,nick:nick||null,style:pickStyle})});
-    if(!r.ok)throw 0;$('noteText').value='';$('noteCount').textContent='0 / 300';st.textContent='已貼上，謝謝你 ♡';
+  btn.disabled=true;st.textContent=photoBlob?'上傳照片中⋯':'送出中⋯';
+  try{const row={body:msg,nick:nick||null,style:pickStyle};
+    if(photoBlob)row.photo=await uploadPhoto(photoBlob);
+    st.textContent='送出中⋯';
+    const r=await fetch(sbBase(),{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)});
+    if(!r.ok)throw 0;$('noteText').value='';$('noteCount').textContent='0 / 300';clearPhoto();st.textContent='已貼上，謝謝你 ♡';
     try{localStorage.setItem('noteAt',String(Date.now()))}catch(e){}await loadNotes();}catch(e){st.textContent='送出失敗，請稍後再試';}
   btn.disabled=false;};
 loadNotes();
