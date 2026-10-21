@@ -138,25 +138,35 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 #swatches{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
 .sw{width:36px;height:36px;border-radius:9px;border:2.5px solid transparent;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}.sw.on{border-color:var(--deep)}
 .noteRow{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;margin-top:6px}
-.wall{position:relative;border:8px solid #8e87a6;outline:3px solid rgba(255,255,255,.85);border-radius:22px;padding:24px 8px 26px;min-height:240px;background:radial-gradient(circle,#c9c1da 2.8px,transparent 3.4px) 0 0/22px 22px,#ece8f4;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:10px 4px;box-shadow:inset 0 2px 8px rgba(70,50,100,.14)}
+.wall{position:relative;border:8px solid #8e87a6;outline:3px solid rgba(255,255,255,.85);border-radius:22px;padding:22px 6px 26px;min-height:240px;background:radial-gradient(circle,#c9c1da 2.8px,transparent 3.4px) 0 0/22px 22px,#ece8f4;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px 0;box-shadow:inset 0 2px 8px rgba(70,50,100,.14)}
 #m-note .win{max-width:440px}
 .photorow{display:flex;align-items:center;gap:8px;margin:4px 0}
-#photoPrev{width:100%;max-height:170px;object-fit:cover;border-radius:10px;margin:6px 0}
-/* 洞洞板上的便條、拍立得 */
-.pn{position:relative;padding:22px 10px 10px;background:var(--c,#fff);color:#5a4b63;box-shadow:0 3px 7px rgba(60,40,90,.28);cursor:pointer;text-align:center;word-break:break-word;font-size:.8rem;line-height:1.5}
-.pn::before{content:"";position:absolute;top:6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;border:3px solid #7d7794;background:#ece8f4}
+/* 洞洞板上的便條與塗鴉：大小、形狀、角度都不一樣 */
+.pn{position:relative;padding:20px 8px 9px;background:var(--c,#fff);color:#5a4b63;filter:drop-shadow(0 2px 3px rgba(60,40,90,.3));cursor:pointer;text-align:center;word-break:break-word;font-size:.72rem;line-height:1.4}
+.pn::before{content:"";position:absolute;top:5px;left:50%;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;border:3px solid #7d7794;background:#ece8f4}
 .pn:hover{z-index:20!important}
-.pn .hd{display:flex;justify-content:center;gap:5px;margin-bottom:3px;font-size:.55rem;color:#a090ae}
+.pn .hd{display:flex;justify-content:center;gap:5px;margin-bottom:2px;font-size:.5rem;color:#a090ae}
 .pn .nm{font-weight:700;color:#6b5a78;max-width:6em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pn .tx{white-space:pre-wrap;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lc,6);overflow:hidden}
+.pn img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;margin:0 0 4px}
 .pn-paper{border-radius:3px}
-.pn-tag{border-radius:16px 16px 6px 6px;border:2px solid rgba(70,60,100,.35)}
-.pn-ticket{border-radius:6px;border-left:4px dotted rgba(70,60,100,.3);border-right:4px dotted rgba(70,60,100,.3)}
-.pn-card{border-radius:3px;background:var(--c,#fff) repeating-linear-gradient(transparent 0 21px,rgba(70,60,100,.1) 21px 22px);line-height:22px}
-.pn-polaroid{background:#fff;padding:22px 7px 8px;border-radius:3px}
-.pn-polaroid img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#ddd;margin:0}
-.pn-polaroid .cap{padding-top:6px}
-.pn-polaroid::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--c,#eee)}
+.pn-tag{border-radius:16px 16px 5px 5px;border:2px solid rgba(70,60,100,.35)}
+.pn-ticket{border-radius:5px;border-left:4px dotted rgba(70,60,100,.3);border-right:4px dotted rgba(70,60,100,.3)}
+.pn-card{border-radius:3px;background:var(--c,#fff) repeating-linear-gradient(transparent 0 19px,rgba(70,60,100,.1) 19px 20px);line-height:20px}
+.pn-round{border-radius:50%;aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;padding:16px 10px 10px}
+.pn-round::before{top:3px}.pn-round img{border-radius:50%}
+.pn-pill{border-radius:999px;padding:18px 16px 9px}.pn-pill::before{display:none}.pn-pill img{border-radius:50%}
+.pn-strip{border-radius:2px;padding:18px 5px 8px}
+.pn-fold{border-radius:3px}
+.pn-fold::after{content:"";position:absolute;right:0;bottom:0;border-left:15px solid rgba(255,255,255,.6);border-top:15px solid #ece8f4;box-shadow:-2px -2px 3px rgba(0,0,0,.12)}
+#pad{margin:6px 0}
+#padCv{display:block;width:100%;max-width:300px;margin:0 auto;aspect-ratio:1/1;border-radius:12px;border:1.5px dashed #c9b6d6;touch-action:none;cursor:crosshair;background:#fff}
+.padbar{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;margin:7px 0}
+.padbar button,.padbar .sz{border:0;background:#fbeaf1;color:#7a5a82;border-radius:99px;padding:5px 10px;font-size:.72rem;cursor:pointer;margin:0}
+.padbar .on{outline:2px solid #7a5a82}
+.padbar .btn{padding:6px 16px;font-size:.8rem}
+.col{display:inline-block;width:22px;height:22px;margin:0 3px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.22);cursor:pointer}.col.on{box-shadow:0 0 0 2px #5b4358}
+#doodlePrev{display:block;width:100%;max-width:180px;margin:6px auto;border-radius:10px;background:#fff}
 .sn{position:relative;padding:11px 12px 13px;box-shadow:0 3px 8px rgba(120,100,150,.2);font-size:.82rem;line-height:1.6;color:#5a4b63;word-break:break-word;cursor:pointer;text-align:center}
 .sn:hover{transform:none!important;z-index:20!important}
 .sn .hd{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;font-size:.5rem;color:#a090ae}
@@ -268,8 +278,14 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
  <div class="body">
   <input id="noteNick" type="text" maxlength="20" placeholder="NAME" autocomplete="off">
   <textarea id="noteText" maxlength="300" placeholder="寫下想說的話⋯"></textarea>
-  <div class="photorow"><button type="button" class="btn" id="photoBtn">＋ 附上照片</button><span class="hint" id="photoName"></span></div>
-  <img id="photoPrev" alt="" hidden><input type="file" id="photoFile" accept="image/*" hidden>
+  <div class="photorow"><button type="button" class="btn" id="doodleBtn">✎ 畫一張塗鴉</button><span class="hint" id="doodleInfo"></span></div>
+  <div id="pad" hidden>
+    <canvas id="padCv" width="480" height="480"></canvas>
+    <div class="padbar"><span id="padCols"></span></div>
+    <div class="padbar"><span class="sz" data-s="3">細</span><span class="sz on" data-s="7">中</span><span class="sz" data-s="15">粗</span><button type="button" id="padEr">橡皮擦</button><button type="button" id="padUndo">復原</button><button type="button" id="padClr">清除</button></div>
+    <div class="padbar"><button type="button" class="btn" id="padOk">完成</button><button type="button" class="btn" id="padCancel">取消</button></div>
+  </div>
+  <img id="doodlePrev" alt="" hidden>
   <div class="hint" style="text-align:left;padding:2px 0">選一種便條紙</div><div id="swatches"></div>
   <input id="noteHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
   <div class="noteRow"><span id="noteCount">0 / 300</span><button class="btn" id="noteSend">貼上去</button></div>
@@ -397,24 +413,25 @@ function shapeBg(kind,color){const g=kind==='he'?`<path d='${HEART}'/>`:`<polygo
   return 'url("data:image/svg+xml,'+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='${color}' stroke='rgba(150,120,190,.3)' stroke-width='1.2' stroke-linejoin='round'>${g}</g></svg>`)+'")';}
 const PHOTO_RE=/^[A-Za-z0-9_-]{6,60}\.(jpg|png|webp)$/;
 const photoURL=f=>PHOTO_RE.test(f||'')?SB_URL.replace(/\/$/,'')+'/storage/v1/object/public/guestbook-photos/'+f:'';
+const SHAPES={paper:[78,92,106,120],tag:[74,88,102,116],ticket:[84,98,112,126],card:[80,94,108,122],round:[80,92,104,116],pill:[112,128,144,160],strip:[58,66,74,82],fold:[78,92,106,120]};
 function buildNote(n){
   const r=rng(Number(n.id)||hash(n.created_at+n.body));
   const st=(Number.isInteger(n.style)&&n.style>=0&&n.style<NOTE_COLORS.length)?n.style:Math.floor(r()*NOTE_COLORS.length);
-  const nick=(n.nick||'').trim()||'匿名',dt=new Date(n.created_at),time=p2(dt.getMonth()+1)+'-'+p2(dt.getDate())+' '+p2(dt.getHours())+':'+p2(dt.getMinutes());
+  const nick=(n.nick||'').trim()||'匿名',dt=new Date(n.created_at),date=p2(dt.getMonth()+1)+'/'+p2(dt.getDate());
   const ph=photoURL(n.photo),len=[...String(n.body)].length,lvl=len<=10?0:len<=30?1:len<=70?2:3;
-  const kind=ph?'polaroid':['paper','tag','ticket','card'][Math.floor(r()*4)];
+  const kinds=ph?['paper','tag','round','fold','card']:Object.keys(SHAPES),kind=kinds[Math.floor(r()*kinds.length)];
   const d=document.createElement('div');d.className='pn pn-'+kind;d.style.setProperty('--c',NOTE_COLORS[st]);
-  d.style.width=(ph?[116,124,132][Math.floor(r()*3)]:[104,122,140,158][lvl])+'px';
+  d.style.width=Math.round((ph?[104,116,128,140][Math.floor(r()*4)]:SHAPES[kind][lvl])*(0.88+r()*0.3))+'px';
   d.style.setProperty('--lc',ph?2:[3,4,6,8][lvl]);
-  d.style.margin=`${(r()*10-2).toFixed(0)}px ${(r()*8-3).toFixed(0)}px`;d.style.zIndex=1+Math.floor(r()*5);
-  d.style.transform=`rotate(${(r()*12-6).toFixed(1)}deg)`;
+  d.style.margin=`${(r()*16-4).toFixed(0)}px ${(r()*10-5).toFixed(0)}px`;d.style.zIndex=1+Math.floor(r()*5);
+  d.style.alignSelf=['flex-start','center','flex-end'][Math.floor(r()*3)];
+  d.style.transform=`translateY(${(r()*14-7).toFixed(0)}px) rotate(${(r()*30-15).toFixed(1)}deg)`;
   const hd=document.createElement('div');hd.className='hd';const nm=document.createElement('span');nm.className='nm';nm.textContent=nick;
-  const tm=document.createElement('span');tm.textContent=time;hd.append(nm,tm);
+  const tm=document.createElement('span');tm.textContent=date;hd.append(nm,tm);
   const tx=document.createElement('div');tx.className='tx';tx.textContent=n.body;
-  if(ph){const im=document.createElement('img');im.loading='lazy';im.alt='';im.src=ph;im.onerror=()=>{im.style.display='none'};
-    const cap=document.createElement('div');cap.className='cap';cap.append(hd,tx);d.append(im,cap);}
-  else d.append(hd,tx);
-  d.onclick=()=>{openCard(nick,ph,time,'',true);$('cText').textContent=n.body;};
+  if(ph){const im=document.createElement('img');im.loading='lazy';im.alt='';im.src=ph;im.onerror=()=>{im.style.display='none'};d.append(im);}
+  d.append(hd,tx);
+  d.onclick=()=>{openCard(nick,ph,date,'',true);$('cText').textContent=n.body;};
   return d;
 }
 function renderWall(rows,msg){const w=$('wall2');w.textContent='';
@@ -429,36 +446,55 @@ NOTE_COLORS.forEach((c,i)=>{const b=document.createElement('button');b.type='but
   b.onclick=()=>{pickStyle=i;[...$('swatches').children].forEach((x,k)=>x.classList.toggle('on',k===i));};$('swatches').appendChild(b);});
 $('fabNote').onclick=()=>{$('noteStatus').textContent='';$('m-note').classList.add('open');};
 $('noteText').oninput=()=>{$('noteCount').textContent=$('noteText').value.length+' / 300';};
-let photoBlob=null;
-function resizeImg(file,max,q){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();
-  i.onload=()=>{const s=Math.min(1,max/Math.max(i.naturalWidth,i.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(i.naturalWidth*s));c.height=Math.max(1,Math.round(i.naturalHeight*s));
-    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(),'image/jpeg',q);};
-  i.onerror=()=>rej();i.src=u;});}
-async function uploadPhoto(blob){
-  const name=(window.crypto&&crypto.randomUUID?crypto.randomUUID().replace(/-/g,''):Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,24)+'.jpg';
+/* 塗鴉板：畫好的圖會變成透明背景的 PNG，貼在便條上 */
+let doodleBlob=null,strokes=[],cur=null,penCol='#5a4b63',penSize=7,eraser=false;
+const pad=$('pad'),pcv=$('padCv'),pcx=pcv.getContext('2d');
+['#5a4b63','#e66fa3','#8f6fe0','#4a9be0','#3fbf95','#f2b441','#ffffff'].forEach((c,i)=>{const s=document.createElement('span');s.className='col'+(i===0?' on':'');s.style.background=c;
+  s.onclick=()=>{penCol=c;eraser=false;$('padEr').classList.remove('on');[...$('padCols').children].forEach(x=>x.classList.toggle('on',x===s));};$('padCols').appendChild(s);});
+document.querySelectorAll('.sz').forEach(b=>b.onclick=()=>{penSize=+b.dataset.s;document.querySelectorAll('.sz').forEach(x=>x.classList.toggle('on',x===b));});
+$('padEr').onclick=()=>{eraser=!eraser;$('padEr').classList.toggle('on',eraser);};
+function padBg(){pcv.style.background=NOTE_COLORS[pickStyle]||'#fff';}
+$('swatches').addEventListener('click',()=>setTimeout(padBg,0));
+function padRedraw(){pcx.clearRect(0,0,pcv.width,pcv.height);pcx.lineCap='round';pcx.lineJoin='round';
+  for(const s of strokes){pcx.globalCompositeOperation=s.er?'destination-out':'source-over';pcx.strokeStyle=s.c;pcx.fillStyle=s.c;pcx.lineWidth=s.w;
+    if(s.p.length<2){pcx.beginPath();pcx.arc(s.p[0][0],s.p[0][1],s.w/2,0,7);pcx.fill();continue;}
+    pcx.beginPath();pcx.moveTo(s.p[0][0],s.p[0][1]);
+    for(let i=1;i<s.p.length-1;i++){const a=s.p[i],b=s.p[i+1];pcx.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2);}
+    const l=s.p[s.p.length-1];pcx.lineTo(l[0],l[1]);pcx.stroke();}
+  pcx.globalCompositeOperation='source-over';}
+const ppt=e=>{const r=pcv.getBoundingClientRect();return [(e.clientX-r.left)/r.width*pcv.width,(e.clientY-r.top)/r.height*pcv.height];};
+pcv.addEventListener('pointerdown',e=>{pcv.setPointerCapture(e.pointerId);cur={c:penCol,w:penSize*1.7*(eraser?1.6:1),er:eraser,p:[ppt(e)]};strokes.push(cur);padRedraw();});
+pcv.addEventListener('pointermove',e=>{if(!cur)return;cur.p.push(ppt(e));padRedraw();});
+['pointerup','pointercancel'].forEach(n=>pcv.addEventListener(n,()=>{cur=null;}));
+$('padUndo').onclick=()=>{strokes.pop();padRedraw();};
+$('padClr').onclick=()=>{strokes=[];padRedraw();};
+$('doodleBtn').onclick=()=>{padBg();pad.hidden=false;$('doodleBtn').hidden=true;};
+$('padCancel').onclick=()=>{pad.hidden=true;$('doodleBtn').hidden=false;};
+$('padOk').onclick=()=>{pad.hidden=true;$('doodleBtn').hidden=false;
+  if(!strokes.some(s=>!s.er)){clearDoodle();return;}
+  pcv.toBlob(b=>{doodleBlob=b;$('doodlePrev').src=URL.createObjectURL(b);$('doodlePrev').hidden=false;$('doodleBtn').textContent='✎ 重畫';
+    $('doodleInfo').textContent='已畫好，會貼在便條上';},'image/png');};
+function clearDoodle(){doodleBlob=null;strokes=[];padRedraw();$('doodlePrev').hidden=true;$('doodleBtn').textContent='✎ 畫一張塗鴉';$('doodleInfo').textContent='';pad.hidden=true;$('doodleBtn').hidden=false;}
+async function uploadImg(blob){
+  const name=(window.crypto&&crypto.randomUUID?crypto.randomUUID().replace(/-/g,''):Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,24)+'.png';
   const url=SB_URL.replace(/\/$/,'')+'/storage/v1/object/guestbook-photos/'+name;
   for(const extra of [{},{Authorization:'Bearer '+SB_KEY}]){
-    const r=await fetch(url,{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'image/jpeg',...extra},body:blob});if(r.ok)return name;}
+    const r=await fetch(url,{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'image/png',...extra},body:blob});if(r.ok)return name;}
   throw 0;}
-function clearPhoto(){photoBlob=null;$('photoPrev').hidden=true;$('photoBtn').textContent='＋ 附上照片';$('photoName').textContent='';}
-$('photoBtn').onclick=()=>{if(photoBlob)clearPhoto();else $('photoFile').click();};
-$('photoFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{photoBlob=await resizeImg(f,900,.82);$('photoPrev').src=URL.createObjectURL(photoBlob);$('photoPrev').hidden=false;
-    $('photoBtn').textContent='✕ 移除照片';$('photoName').textContent=Math.round(photoBlob.size/1024)+' KB';$('noteStatus').textContent='';}
-  catch(err){clearPhoto();$('noteStatus').textContent='這張照片讀不出來，換一張試試';}};
 $('noteSend').onclick=async()=>{
-  const msg=$('noteText').value.trim(),nick=$('noteNick').value.trim().slice(0,20),st=$('noteStatus'),btn=$('noteSend');
-  if(!msg){st.textContent='請先寫點什麼';return;}
+  let msg=$('noteText').value.trim();const nick=$('noteNick').value.trim().slice(0,20),st=$('noteStatus'),btn=$('noteSend');
+  if(!msg&&!doodleBlob){st.textContent='請先寫點什麼，或畫點什麼';return;}
+  if(!msg)msg='✎';
   if($('noteHp').value){$('noteText').value='';st.textContent='已貼上，謝謝你 ♡';return;}
   if(!sbReady()){st.textContent='留言板還沒設定';return;}
   let last=0;try{last=+localStorage.getItem('noteAt')||0}catch(e){}
   if(Date.now()-last<30000){st.textContent='請稍等一下再送出';return;}
-  btn.disabled=true;st.textContent=photoBlob?'上傳照片中⋯':'送出中⋯';
+  btn.disabled=true;st.textContent=doodleBlob?'上傳塗鴉中⋯':'送出中⋯';
   try{const row={body:msg,nick:nick||null,style:pickStyle};
-    if(photoBlob)row.photo=await uploadPhoto(photoBlob);
+    if(doodleBlob)row.photo=await uploadImg(doodleBlob);
     st.textContent='送出中⋯';
     const r=await fetch(sbBase(),{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)});
-    if(!r.ok)throw 0;$('noteText').value='';$('noteCount').textContent='0 / 300';clearPhoto();st.textContent='已貼上，謝謝你 ♡';
+    if(!r.ok)throw 0;$('noteText').value='';$('noteCount').textContent='0 / 300';clearDoodle();st.textContent='已貼上，謝謝你 ♡';
     try{localStorage.setItem('noteAt',String(Date.now()))}catch(e){}await loadNotes();}catch(e){st.textContent='送出失敗，請稍後再試';}
   btn.disabled=false;};
 loadNotes();
