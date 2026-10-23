@@ -88,15 +88,25 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 /* 相簿 */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .item{position:relative;background:#fff;color:var(--deep);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
-.item img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
-.item .t{padding:8px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
-.item h3{margin:0;font-size:.82rem}.item .txt{margin:0;max-width:100%;font-size:.68rem;line-height:1.4;color:#8a7a95;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.item .dt{width:100%;margin-top:2px;font-style:italic;font-size:.72rem;color:#8a7a95}
+.item img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
+.item .t{padding:5px 6px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.item h3{margin:0;font-size:.78rem;line-height:1.25}.item .txt{margin:0;max-width:100%;font-size:.6rem;line-height:1.3;color:#8a7a95;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.item .dt{width:100%;margin-top:1px;font-style:italic;font-size:.64rem;line-height:1.3;color:#8a7a95}
 .item .im{position:relative}
 .item .lockb{position:absolute;right:6px;top:6px;background:rgba(255,255,255,.85);border-radius:99px;padding:2px 7px;font-size:.8rem}
 .item .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;letter-spacing:.22em;text-shadow:0 1px 5px rgba(60,30,80,.5);background:rgba(60,30,80,.16)}
 .item.lockedv .im img{filter:blur(3px)}
 .item .mv{position:absolute;left:6px;top:6px;display:flex;gap:4px}.item .mv button{border:0;border-radius:99px;background:rgba(255,255,255,.88);color:var(--deep);width:28px;height:28px;font-size:.72rem;cursor:pointer;padding:0}.item .mv button:disabled{opacity:.35}
+#p-gallery{margin:0 -20px}
+#p-gallery .grid{gap:8px}
+.cats{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 0 14px}
+.cats button{border:0;border-radius:99px;padding:5px 12px;font-size:.72rem;letter-spacing:.05em;color:var(--ink);background:rgba(255,255,255,.14);opacity:.8;cursor:pointer}
+.cats button.on{background:rgba(255,255,255,.32);color:#fff;opacity:1}
+#eCat{display:block;width:100%;border:1px solid #d8c9ee;border-radius:10px;padding:8px 10px;margin:6px 0;font-family:inherit;font-size:.88rem;color:var(--deep);background:#fff}
+.ordrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #eee}
+.ordrow img,.ordrow i{width:48px;height:36px;border-radius:6px;object-fit:cover;background:#ddd;flex:0 0 48px}
+.ordrow span{flex:1;min-width:0;font-size:.82rem;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ordrow button{border:0;border-radius:8px;background:#f1dfeb;color:var(--deep);width:34px;height:30px;cursor:pointer;padding:0}.ordrow button:disabled{opacity:.3}
 .lockrow{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:.78rem;line-height:1.5;text-align:left}.lockrow input{margin-top:3px}
 /* 分頁列、按鈕 */
 nav{position:fixed;left:40px;right:40px;bottom:calc(8px + env(safe-area-inset-bottom));max-width:420px;margin:0 auto;height:var(--nav);z-index:30;display:flex;padding:3px;border-radius:18px;
@@ -219,7 +229,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 #gPhotos img{display:block;width:100%;margin-bottom:8px;border-radius:10px}
 #m-login input,#m-edit input[type=text]{display:block;width:100%;border:1px solid #d8c9ee;border-radius:10px;padding:8px 10px;margin:6px 0;font-family:inherit;font-size:.88rem;color:var(--deep);background:#fff}
 #eStory{width:100%;min-height:110px;resize:vertical;border:1px solid #d8c9ee;border-radius:10px;padding:8px 10px;margin:6px 0;font-family:inherit;font-size:.88rem;color:var(--deep);background:#fff}
-#eCrop{display:block;width:100%;max-width:280px;aspect-ratio:4/5;margin:6px auto;border-radius:10px;touch-action:none;cursor:grab}
+#eCrop{display:block;width:100%;max-width:320px;aspect-ratio:3/2;margin:6px auto;border-radius:10px;touch-action:none;cursor:grab}
 #eStrip{display:flex;gap:6px;overflow-x:auto;margin:6px 0}#eStrip img{width:52px;height:52px;object-fit:cover;border-radius:8px;border:2px solid transparent;flex:0 0 auto;margin:0}#eStrip img.on{border-color:var(--deep)}
 </style>
 </head>
@@ -267,7 +277,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
       <div class="noterow"><img class="side" id="sideL" alt="" hidden><div class="card mini" id="mini"><h3>✦ COUPLE NOTE ✦</h3></div><img class="side" id="sideR" alt="" hidden></div>
     </div>
   </section>
-  <section class="page" id="p-gallery"><div class="grid" id="grid"></div><div class="galfoot"><button id="admBtn">✎ 管理</button></div><div class="admbar" id="admBar" hidden><button class="btn" id="admNew">＋ 新增卡片</button><button class="btn" id="admOut">登出</button></div></section>
+  <section class="page" id="p-gallery"><div class="cats" id="cats"></div><div class="grid" id="grid"></div><div class="galfoot"><button id="admBtn">✎ 管理</button></div><div class="admbar" id="admBar" hidden><button class="btn" id="admNew">＋ 新增卡片</button><button class="btn" id="admOrd">調整順序</button><button class="btn" id="admOut">登出</button></div></section>
   <section class="page" id="p-qa"><div class="qh">✦ COUPLE Q&amp;A ✦</div><div id="qaList"></div></section>
 </div>
 
@@ -315,15 +325,19 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 <div class="modal" id="m-login"><div class="win"><div class="bar"><span>管理登入</span><button data-close>✕</button></div>
  <div class="body"><input id="lgEmail" type="email" placeholder="Email" autocomplete="username"><input id="lgPw" type="password" placeholder="密碼" autocomplete="current-password">
   <div class="noteRow"><span class="hint" id="lgSt"></span><button class="btn" id="lgGo">登入</button></div></div></div></div>
+<div class="modal" id="m-order"><div class="win"><div class="bar"><span>調整順序</span><button data-close>✕</button></div>
+ <div class="body"><div class="hint" id="ordHint" style="text-align:left;padding:0 0 6px"></div><div id="ordList"></div>
+  <div class="noteRow"><span class="hint" id="ordStatus"></span><button class="btn" id="ordSave">儲存順序</button></div></div></div></div>
 <div class="modal" id="m-edit"><div class="win"><div class="bar"><span id="eHead">新增卡片</span><button data-close>✕</button></div>
  <div class="body">
   <div id="ePhotoBox"><button type="button" class="btn" id="eAddPh">＋ 選照片（可多選，最多 8 張）</button><input type="file" id="eFile" accept="image/*" multiple hidden>
    <div id="eStrip"></div>
    <div id="eCropWrap" hidden><div class="hint" style="text-align:left;padding:2px 0">封面：拖曳照片調整位置，下面可以放大縮小（點上面的小圖可換封面）</div>
-    <canvas id="eCrop" width="320" height="400"></canvas><input type="range" id="eZoom" min="1" max="4" step="0.01" value="1" style="width:100%"></div></div>
+    <canvas id="eCrop" width="320" height="214"></canvas><input type="range" id="eZoom" min="1" max="4" step="0.01" value="1" style="width:100%"></div></div>
   <div class="hint" id="eNote" hidden style="text-align:left">想重新調整封面：點上面的小圖選一張，拖曳／縮放後儲存（不動就保留原本的封面）。要換照片請刪除卡片重新新增。</div>
   <input id="eTitle" type="text" maxlength="60" placeholder="標題"><input id="eScene" type="text" maxlength="200" placeholder="簡短的一句話（顯示在卡片上）"><input id="eDate" type="text" maxlength="20" placeholder="日期，例如 2026.10.20">
   <textarea id="eStory" maxlength="3000" placeholder="點進去顯示的完整文字（可以換行）"></textarea>
+  <select id="eCat"></select>
   <label class="lockrow"><input type="checkbox" id="eLock"><span>🔒 先不公開：訪客只會看到模糊的封面，點進去也看不到照片和文字</span></label>
   <div class="noteRow"><span class="hint" id="eStatus"></span><button class="btn" id="eSave">儲存</button></div></div></div></div>
 
@@ -704,7 +718,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
 /* 相簿管理：登入後可以在網站上新增卡片（放照片＋文案），照片可自己調整裁切成同一個比例；點進去看全部照片 */
 (function(){
   const $=id=>document.getElementById(id);
-  const SB=SB_URL.replace(/\/$/,''),CW=320,CH=400; /* 封面比例 4:5 */
+  const SB=SB_URL.replace(/\/$/,''),CW=320,CH=214; /* 封面比例 3:2（寬橫） */
   const NAME_RE=/^[A-Za-z0-9_-]{6,60}\.jpg$/;
   const gURL=f=>NAME_RE.test(f||'')?SB+'/storage/v1/object/public/gallery/'+f:'';
   const rid=()=>(window.crypto&&crypto.randomUUID?crypto.randomUUID().replace(/-/g,''):Date.now().toString(36)+Math.random().toString(36).slice(2)).slice(0,24);
@@ -725,29 +739,37 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   function adminUI(){const on=!!A.get();$('admBar').hidden=!on;$('admBtn').parentElement.hidden=!(on||flag());$('admBtn').textContent=on?'✎ 管理中':'✎ 管理';}
   {const hh=document.querySelector('.head h1');let taps=0,tt=0;hh.addEventListener('click',()=>{const n=Date.now();taps=(n-tt<2500)?taps+1:1;tt=n;if(taps>=5){taps=0;setFlag(true);adminUI();showPage('gallery');}});}
 
-  /* ---- 顯示相簿（順序由你手動決定，新增的卡片會排在最後） ---- */
-  let rows=[];
-  function cardEl(row,i){const d=document.createElement('div');const th=gURL(row.thumb),adm=!!A.get();d.className='item'+(row.locked?' locked':'')+(row.locked&&!adm?' lockedv':'');
+  /* ---- 顯示相簿（分類分頁；順序用「調整順序」手動決定，新增的卡片排在最後） ---- */
+  let rows=[],curCat='ALL';
+  const CATS=['LD','SD','uori','Gift Art','Yume goods']; /* 分類名稱，想改就改這裡 */
+  const inCat=r=>curCat==='ALL'||r.category===curCat;
+  function cardEl(row){const d=document.createElement('div');const th=gURL(row.thumb),adm=!!A.get();d.className='item'+(row.locked?' locked':'')+(row.locked&&!adm?' lockedv':'');
     d.innerHTML=`<div class="im">${th?`<img src="${th}" alt="" loading="lazy">`:''}${row.locked?'<span class="lockb">🔒</span>':''}${row.locked&&!adm?'<span class="soon">to be soon</span>':''}</div><div class="t"><h3>${esc(row.title)}</h3>${row.scene?`<p class="txt">${esc(row.scene)}</p>`:''}${row.date?`<span class="dt">${esc(row.date)}</span>`:''}</div>`;
-    if(adm){const mv=document.createElement('div');mv.className='mv';
-      [['◀',-1],['▶',1]].forEach(([s,k])=>{const b=document.createElement('button');b.textContent=s;b.disabled=(i+k<0||i+k>=rows.length);b.onclick=e=>{e.stopPropagation();moveCard(i,k);};mv.appendChild(b);});(d.querySelector('.im')||d).appendChild(mv);}
     d.onclick=()=>openGal(row);return d;}
+  function renderTabs(){const c=$('cats');c.textContent='';['ALL',...CATS].forEach(n=>{const b=document.createElement('button');b.textContent=n;b.className=n===curCat?'on':'';b.onclick=()=>{curCat=n;renderTabs();renderGrid();};c.appendChild(b);});}
+  function renderGrid(){const g=$('grid');g.textContent='';const list=rows.filter(inCat);
+    if(!list.length){const h=document.createElement('div');h.className='hint';h.style.gridColumn='1/-1';h.textContent=rows.length?'這個分類還沒有照片':'還沒有照片';g.appendChild(h);return;}
+    list.forEach(r=>g.appendChild(cardEl(r)));}
   async function loadGallery(){
     let got=null;const t=sbReady()?await token():null;
     if(sbReady()){const q=(name,hd)=>fetch(SB+'/rest/v1/'+name+'?select=*&order=sort.asc,id.asc&limit=200',{headers:hd});
       try{let r=t?await q('gallery',H(t,{})):await q('gallery_public',{apikey:SB_KEY});
         if(!r.ok&&!t)r=await q('gallery',{apikey:SB_KEY});   /* 還沒建立「隱藏用」的 view：退回原本的資料表 */
         if(r.ok)got=await r.json();}catch(e){}}
-    const g=$('grid');g.textContent='';
-    if(got===null){CARDS.forEach(addCard);return;}   /* 還沒接上資料表：維持原本的範例卡片 */
-    rows=got;
-    if(!rows.length){const h=document.createElement('div');h.className='hint';h.style.gridColumn='1/-1';h.textContent='還沒有照片';g.appendChild(h);return;}
-    rows.forEach((r,i)=>g.appendChild(cardEl(r,i)));}
-  async function moveCard(i,k){const j=i+k;if(j<0||j>=rows.length)return;const t=await token();if(!t){openLogin();return;}
-    const a=[...rows];[a[i],a[j]]=[a[j],a[i]];
-    try{const rs=await Promise.all(a.map((r,n)=>r.sort===n+1?null:fetch(SB+'/rest/v1/gallery?id=eq.'+r.id,{method:'PATCH',headers:H(t,J),body:JSON.stringify({sort:n+1})})));
-      if(rs.some(r=>r&&!r.ok))throw 0;}catch(e){alert('移動失敗，請稍後再試');}
-    await loadGallery();}
+    if(got===null){$('cats').hidden=true;$('grid').textContent='';CARDS.forEach(addCard);return;}   /* 還沒接上資料表：維持原本的範例卡片 */
+    rows=got;$('cats').hidden=false;renderTabs();renderGrid();}
+  /* ---- 調整順序（在最下面的「調整順序」，不會出現在卡片上） ---- */
+  let ordList=[];
+  function renderOrd(){const box=$('ordList');box.textContent='';
+    ordList.forEach((r,i)=>{const row=document.createElement('div');row.className='ordrow';const th=gURL(r.thumb);
+      row.innerHTML=(th?`<img src="${th}" alt="">`:'<i></i>')+`<span>${esc(r.title)}</span>`;
+      [['▲',-1],['▼',1]].forEach(([s,k])=>{const b=document.createElement('button');b.textContent=s;b.disabled=(i+k<0||i+k>=ordList.length);b.onclick=()=>{[ordList[i],ordList[i+k]]=[ordList[i+k],ordList[i]];renderOrd();};row.appendChild(b);});
+      box.appendChild(row);});}
+  $('admOrd').onclick=()=>{ordList=rows.filter(inCat);$('ordHint').textContent='目前分類：'+curCat+'（用 ▲▼ 移動，最後按「儲存順序」）';$('ordStatus').textContent='';renderOrd();open('m-order');};
+  $('ordSave').onclick=async()=>{const t=await token();if(!t){close('m-order');openLogin();return;}
+    const it=ordList[Symbol.iterator](),ids=new Set(ordList.map(r=>r.id)),all=rows.map(r=>ids.has(r.id)?it.next().value:r);$('ordStatus').textContent='儲存中⋯';
+    try{const rs=await Promise.all(all.map((r,n)=>r.sort===n+1?null:fetch(SB+'/rest/v1/gallery?id=eq.'+r.id,{method:'PATCH',headers:H(t,J),body:JSON.stringify({sort:n+1})})));
+      if(rs.some(r=>r&&!r.ok))throw 0;close('m-order');$('ordStatus').textContent='';await loadGallery();}catch(e){$('ordStatus').textContent='儲存失敗，請稍後再試';}};
   function openGal(row){$('gTitle').textContent=row.title;const box=$('gPhotos');box.textContent='';const adm=!!A.get();
     if(row.locked&&!adm){$('gDate').textContent='';$('gText').style.whiteSpace='pre-wrap';$('gText').textContent='🔒 to be soon ♡';$('gAdm').hidden=true;open('m-gal');return;}
     (row.photos&&row.photos.length?row.photos:[row.thumb]).forEach(n=>{const u=gURL(n);if(!u)return;const im=document.createElement('img');im.src=u;im.alt='';im.loading='lazy';box.appendChild(im);});
@@ -786,6 +808,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   function openEditor(row){editing=row||null;files=[];srcs=row?(row.photos||[]).map(gURL).filter(Boolean):[];cover=0;cimg=null;recrop=false;$('eCropWrap').hidden=true;$('eStatus').textContent='';
     renderStrip();$('ePhotoBox').hidden=false;$('eAddPh').hidden=!!row;$('eHead').textContent=row?'編輯卡片':'新增卡片';
     $('eTitle').value=row?row.title:'';$('eScene').value=row&&row.scene||'';$('eDate').value=row?(row.date||''):new Date().toISOString().slice(0,10).replace(/-/g,'.');$('eStory').value=row&&row.story||'';
+    const ec=$('eCat');if(!ec.options.length)[['','（未分類）'],...CATS.map(c=>[c,c])].forEach(([v,t])=>ec.add(new Option(t,v)));ec.value=row?(row.category||''):(curCat!=='ALL'?curCat:'');
     $('eLock').checked=!!(row&&row.locked);$('eNote').hidden=!row;open('m-edit');}
   $('admNew').onclick=async()=>{if(await token())openEditor(null);else openLogin();};
   const blob=(c,q)=>new Promise(res=>c.toBlob(res,'image/jpeg',q));
@@ -803,6 +826,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
     if(!editing&&!(files.length&&cimg)){st.textContent='請至少選一張照片';return;}
     const t=await token();if(!t){close('m-edit');openLogin();return;}
     const f={title,scene:$('eScene').value.trim()||null,date:$('eDate').value.trim()||null,story:$('eStory').value.trim()||null};
+    {const cv=$('eCat').value;if(cv||(editing&&editing.category))f.category=cv||null;}
     btn.disabled=true;
     try{
       if(editing){st.textContent='儲存中⋯';const patch={...f};
