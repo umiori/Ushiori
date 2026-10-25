@@ -94,8 +94,9 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .item .dt{width:100%;margin-top:1px;font-style:italic;font-size:.64rem;line-height:1.3;color:#8a7a95}
 .item .im{position:relative}
 .item .lockb{position:absolute;right:6px;top:6px;background:rgba(255,255,255,.85);border-radius:99px;padding:2px 7px;font-size:.8rem}
-.item .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;letter-spacing:.22em;text-shadow:0 1px 5px rgba(60,30,80,.5);background:rgba(60,30,80,.16)}
-.item.lockedv .im img{filter:blur(3px)}
+.item .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;letter-spacing:.22em;text-shadow:0 1px 5px rgba(60,30,80,.5);background:rgba(60,30,80,.28)}
+.item.lockedv .im{overflow:hidden}
+.item.lockedv .im img{filter:blur(16px);transform:scale(1.3)}
 .item .mv{position:absolute;left:6px;top:6px;display:flex;gap:4px}.item .mv button{border:0;border-radius:99px;background:rgba(255,255,255,.88);color:var(--deep);width:28px;height:28px;font-size:.72rem;cursor:pointer;padding:0}.item .mv button:disabled{opacity:.35}
 #p-gallery{margin:0 -20px}
 #p-gallery .grid{gap:8px}
@@ -129,8 +130,6 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
  border-radius:18px;padding:8px 12px;display:flex;gap:10px;align-items:center;text-align:left;cursor:pointer;box-shadow:0 8px 22px rgba(60,30,80,.3);transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
 .toast.show{transform:translate(-50%,0)}
 .toast.show::after{content:"";position:absolute;left:8px;top:5px;width:12px;height:12px;border-radius:50%;background:#e5484d;border:2px solid #fff}
-.toast.show.shake{animation:tshake 1.8s infinite}
-@keyframes tshake{0%,55%,100%{transform:translate(-50%,0)}59%{transform:translate(calc(-50% - 8px),0) rotate(-1.4deg)}63%{transform:translate(calc(-50% + 8px),0) rotate(1.4deg)}67%{transform:translate(calc(-50% - 6px),0) rotate(-1deg)}71%{transform:translate(calc(-50% + 6px),0) rotate(1deg)}75%{transform:translate(calc(-50% - 3px),0)}80%{transform:translate(-50%,0)}}
 .wrap{transition:padding-top .3s}body.hasToast .wrap{padding-top:calc(96px + env(safe-area-inset-top))}
 #m-chat.mustread .bar button{opacity:.25}
 .win.nope{animation:nope .35s}@keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
@@ -180,6 +179,16 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 .pn-pill{border-radius:999px;padding:18px 16px 9px}.pn-pill::before{display:none}.pn-pill img{border-radius:50%}
 .pn-strip{border-radius:2px;padding:18px 5px 8px}
 .pn-fold{border-radius:3px}
+.pnw{position:relative;filter:drop-shadow(0 2px 3px rgba(60,40,90,.3));cursor:pointer}.pnw:hover{z-index:20!important}
+.pn-heart,.pn-star,.pn-bow{filter:none;display:flex;flex-direction:column;justify-content:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:100% 100%;mask-size:100% 100%}
+.pn-heart{aspect-ratio:1/1;padding:24% 16% 14%;-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M50 92C20 70 3 52 3 31 3 14 15 5 28 5c10 0 18 6 22 14 4-8 12-14 22-14 13 0 25 9 25 26 0 21-17 39-47 61z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M50 92C20 70 3 52 3 31 3 14 15 5 28 5c10 0 18 6 22 14 4-8 12-14 22-14 13 0 25 9 25 26 0 21-17 39-47 61z'/></svg>")}
+.pn-heart::before{top:19%}
+.pn-star{aspect-ratio:1/1;padding:31% 23% 17%;-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='50,3 62,36 97,38 69,59 80,94 50,73 20,94 31,59 3,38 38,36'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='50,3 62,36 97,38 69,59 80,94 50,73 20,94 31,59 3,38 38,36'/></svg>")}
+.pn-star::before{top:15%}
+.pn-bow{aspect-ratio:100/60;padding:6% 22%;-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'><path d='M50 30C41 9 20 0 8 6-2 12-2 48 8 54c12 6 33-3 42-24zM50 30C59 9 80 0 92 6c10 6 10 42 0 48-12 6-33-3-42-24zM50 22c5 0 9 3.5 9 8s-4 8-9 8-9-3.5-9-8 4-8 9-8z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'><path d='M50 30C41 9 20 0 8 6-2 12-2 48 8 54c12 6 33-3 42-24zM50 30C59 9 80 0 92 6c10 6 10 42 0 48-12 6-33-3-42-24zM50 22c5 0 9 3.5 9 8s-4 8-9 8-9-3.5-9-8 4-8 9-8z'/></svg>")}
+.pn-bow::before{top:calc(50% - 5.5px)}.pn-bow .hd{display:none}
+.pn.pn-heart .tx,.pn.pn-star .tx{-webkit-line-clamp:3}.pn.pn-bow .tx{-webkit-line-clamp:2}
+.pn-square{aspect-ratio:1/1;border-radius:6px;display:flex;flex-direction:column;justify-content:center;padding:16px 8px 8px}
 .pn-fold::after{content:"";position:absolute;right:0;bottom:0;border-left:15px solid rgba(255,255,255,.6);border-top:15px solid #ece8f4;box-shadow:-2px -2px 3px rgba(0,0,0,.12)}
 #pad{margin:6px 0}
 #padCv{display:block;width:100%;max-width:300px;margin:0 auto;aspect-ratio:1/1;border-radius:12px;border:1.5px dashed #c9b6d6;touch-action:none;cursor:crosshair;background:#fff}
@@ -445,7 +454,7 @@ let vibT=0;
 function startVib(){if(vibT)return;const go=()=>{try{navigator.vibrate&&navigator.vibrate([90,60,90])}catch(e){}};go();vibT=setInterval(go,1800);}
 function stopVib(){clearInterval(vibT);vibT=0;toast.classList.remove('shake');try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
 function notify(t){if(isOpen())return;unread++;$('tText').textContent=typeof t==='object'?'傳了一張貼圖':t;
-  $('tBadge').textContent=unread;$('tBadge').style.display='flex';toast.classList.add('show','shake');document.body.classList.add('hasToast');startVib();}
+  $('tBadge').textContent=unread;$('tBadge').style.display='flex';toast.classList.add('show');document.body.classList.add('hasToast');startVib();}
 function step(){
   if(ci>=CHAT.length||CHAT[ci][0]==='me'){running=false;updateHint();return;}
   const[w,t]=CHAT[ci];const deliver=()=>{ci++;addBubble(w,t);notify(t);setTimeout(step,1800);};
@@ -470,13 +479,14 @@ function shapeBg(kind,color){const g=kind==='he'?`<path d='${HEART}'/>`:`<polygo
   return 'url("data:image/svg+xml,'+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='${color}' stroke='rgba(150,120,190,.3)' stroke-width='1.2' stroke-linejoin='round'>${g}</g></svg>`)+'")';}
 const PHOTO_RE=/^[A-Za-z0-9_-]{6,60}\.(jpg|png|webp)$/;
 const photoURL=f=>PHOTO_RE.test(f||'')?SB_URL.replace(/\/$/,'')+'/storage/v1/object/public/guestbook-photos/'+f:'';
-const SHAPES={paper:[78,92,106,120],tag:[74,88,102,116],ticket:[84,98,112,126],card:[80,94,108,122],round:[80,92,104,116],pill:[112,128,144,160],strip:[58,66,74,82],fold:[78,92,106,120]};
+const SHAPES={paper:[78,92,106,120],tag:[74,88,102,116],ticket:[84,98,112,126],card:[80,94,108,122],round:[80,92,104,116],pill:[112,128,144,160],strip:[58,66,74,82],fold:[78,92,106,120],heart:[84,96,110,124],star:[90,102,116,130],bow:[92,106,122,138],square:[70,82,94,108]};
+const MASKED=['heart','star','bow']; /* 這幾種要用遮罩切形狀，外面多包一層才有陰影 */
 function buildNote(n){
   const r=rng(Number(n.id)||hash(n.created_at+n.body));
   const st=(Number.isInteger(n.style)&&n.style>=0&&n.style<NOTE_COLORS.length)?n.style:Math.floor(r()*NOTE_COLORS.length);
   const nick=(n.nick||'').trim()||'匿名',dt=new Date(n.created_at),date=p2(dt.getMonth()+1)+'/'+p2(dt.getDate());
   const ph=photoURL(n.photo),len=[...String(n.body)].length,lvl=len<=10?0:len<=30?1:len<=70?2:3;
-  const kinds=ph?['paper','tag','round','fold','card']:Object.keys(SHAPES),kind=kinds[Math.floor(r()*kinds.length)];
+  const kinds=ph?['paper','tag','round','fold','card']:Object.keys(SHAPES).filter(k=>!(k==='bow'&&len>24)&&!(k==='star'&&len>40)&&!(k==='heart'&&len>70)),kind=kinds[Math.floor(r()*kinds.length)];
   const d=document.createElement('div');d.className='pn pn-'+kind;d.style.setProperty('--c',NOTE_COLORS[st]);
   d.style.width=Math.round((ph?[104,116,128,140][Math.floor(r()*4)]:SHAPES[kind][lvl])*(0.88+r()*0.3))+'px';
   d.style.setProperty('--lc',ph?2:[3,4,6,8][lvl]);
@@ -489,6 +499,9 @@ function buildNote(n){
   if(ph){const im=document.createElement('img');im.loading='lazy';im.alt='';im.src=ph;im.onerror=()=>{im.style.display='none'};d.append(im);}
   d.append(hd,tx);
   d.onclick=()=>{openCard(nick,ph,date,'',true);$('cText').textContent=n.body;};
+  if(MASKED.includes(kind)){const o=document.createElement('div');o.className='pnw';
+    ['width','margin','zIndex','alignSelf','transform'].forEach(k=>{o.style[k]=d.style[k];d.style[k]='';});
+    d.style.width='100%';o.appendChild(d);o.onclick=d.onclick;d.onclick=null;return o;}
   return d;
 }
 function renderWall(rows,msg){const w=$('wall2');w.textContent='';
@@ -753,8 +766,8 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
 
   /* ---- 顯示相簿（分類分頁；順序用「調整順序」手動決定，新增的卡片排在最後） ---- */
   let rows=[],curCat='ALL';
-  const CATS=['LD','SD','uori','Gift Art','Yume goods','🐶🐰']; /* 分類名稱，想改就改這裡 */
-  const inCat=r=>curCat==='ALL'?r.category!=='Yume goods':r.category===curCat; /* ALL 不顯示 Yume goods */
+  const CATS=['LD','SD','uori','Gift Art','🐶🐰']; /* 分類名稱，想改就改這裡 */
+  const inCat=r=>curCat==='ALL'?r.category!=='Gift Art':r.category===curCat; /* ALL 不顯示 Gift Art */
   function cardEl(row){const d=document.createElement('div');const th=gURL(row.thumb),adm=!!A.get();d.className='item'+(row.locked?' locked lockedv':'');
     d.innerHTML=`<div class="im">${th?`<img src="${th}" alt="" loading="lazy">`:''}${row.locked?'<span class="soon">to be soon</span>':''}</div><div class="t"><h3>${esc(row.title)}</h3>${row.scene?`<p class="txt">${esc(row.scene)}</p>`:''}${row.date?`<span class="dt">${esc(row.date)}</span>`:''}</div>`;
     d.onclick=()=>openGal(row);return d;}
@@ -827,7 +840,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   function cropCanvas(){const o=document.createElement('canvas');o.width=CW*2;o.height=CH*2;const x=o.getContext('2d'),[w,h]=clamp();x.fillStyle='#fff';x.fillRect(0,0,o.width,o.height);x.drawImage(cimg,ox*2,oy*2,w*2,h*2);return o;}
   /* 模糊版封面：縮到很小再放大，看不出內容。訪客只拿得到這張，拿不到原圖的檔名 */
   function blurBlob(src){const sm=(w,s)=>{const c=document.createElement('canvas');c.width=w;c.height=Math.round(w*CH/CW);const x=c.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(s,0,0,c.width,c.height);return c;};
-    return blob(sm(CW,sm(40,sm(10,src))),.7);}
+    return blob(sm(CW,sm(32,sm(4,src))),.7);}
   const loadImg=u=>new Promise((res,rej)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=()=>rej();i.src=u;});
   function fullBlob(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();i.onload=()=>{const s=Math.min(1,1600/Math.max(i.naturalWidth,i.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(i.naturalWidth*s);c.height=Math.round(i.naturalHeight*s);
     const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);blob(c,.86).then(res);};i.onerror=()=>rej();i.src=u;});}
@@ -843,8 +856,8 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
     try{
       if(editing){st.textContent='儲存中⋯';const patch={...f};
         if(recrop&&cimg){const tn=rid()+'.jpg';st.textContent='處理封面中⋯';await up(t,tn,await blob(cropCanvas(),.86));patch.thumb=tn;}
-        if(lock&&(patch.thumb||!editing.blur_thumb)){const bn=rid()+'.jpg';st.textContent='製作模糊封面中⋯';
-          await up(t,bn,await blurBlob(patch.thumb?cropCanvas():await loadImg(gURL(editing.thumb))));patch.blur_thumb=bn;}
+        if(lock){const bn=rid()+'.jpg';st.textContent='製作模糊封面中⋯';
+          try{await up(t,bn,await blurBlob(patch.thumb?cropCanvas():await loadImg(gURL(editing.thumb))));patch.blur_thumb=bn;}catch(e){if(!editing.blur_thumb)throw e;}}
         if(lock!==!!editing.locked)patch.locked=lock;
         const r=await fetch(SB+'/rest/v1/gallery?id=eq.'+editing.id,{method:'PATCH',headers:H(t,J),body:JSON.stringify(patch)});if(!r.ok)throw 0;
         if(patch.thumb)del(t,editing.thumb);if(patch.blur_thumb)del(t,editing.blur_thumb);}
