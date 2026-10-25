@@ -128,8 +128,14 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
 .toast{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translate(-50%,-140%);width:calc(100% - 28px);max-width:380px;z-index:70;background:rgba(255,250,252,.97);color:var(--deep);
  border-radius:18px;padding:8px 12px;display:flex;gap:10px;align-items:center;text-align:left;cursor:pointer;box-shadow:0 8px 22px rgba(60,30,80,.3);transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
 .toast.show{transform:translate(-50%,0)}
+.toast.show::after{content:"";position:absolute;left:8px;top:5px;width:12px;height:12px;border-radius:50%;background:#e5484d;border:2px solid #fff}
+.toast.show.shake{animation:tshake 1.8s infinite}
+@keyframes tshake{0%,55%,100%{transform:translate(-50%,0)}59%{transform:translate(calc(-50% - 8px),0) rotate(-1.4deg)}63%{transform:translate(calc(-50% + 8px),0) rotate(1.4deg)}67%{transform:translate(calc(-50% - 6px),0) rotate(-1deg)}71%{transform:translate(calc(-50% + 6px),0) rotate(1deg)}75%{transform:translate(calc(-50% - 3px),0)}80%{transform:translate(-50%,0)}}
+.wrap{transition:padding-top .3s}body.hasToast .wrap{padding-top:calc(96px + env(safe-area-inset-top))}
+#m-chat.mustread .bar button{opacity:.25}
+.win.nope{animation:nope .35s}@keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .toast b{display:block;font-size:.8rem}.toast span{display:block;font-size:.78rem;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#tBadge{background:#d97aa5;color:#fff;border-radius:99px;min-width:20px;height:20px;padding:0 6px;font-size:.7rem;font-style:normal;display:none;align-items:center;justify-content:center}
+#tBadge{background:#e5484d;color:#fff;border-radius:99px;min-width:20px;height:20px;padding:0 6px;font-size:.7rem;font-style:normal;display:none;align-items:center;justify-content:center}
 .modal{position:fixed;inset:0;background:rgba(70,40,90,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
 #m-card{z-index:60}.modal.open{display:flex}
 .win{width:100%;max-width:400px;max-height:84vh;overflow:auto;background:#fbf3f7;color:var(--deep);border-radius:14px;box-shadow:0 14px 30px rgba(60,30,80,.35);animation:pop .18s ease-out}
@@ -414,7 +420,9 @@ function addCard(c){const d=document.createElement('div');d.className='item';
   d.onclick=()=>openCard(c.title,c.img,c.date,esc(c.story||''));$('grid').appendChild(d);}
 CARDS.forEach(addCard);
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{
-  if(e.target===m||e.target.hasAttribute('data-close')){m.classList.remove('open');if(m.id==='m-chat')afterChatClose();}}));
+  if(e.target===m||e.target.hasAttribute('data-close')){
+    if(m.id==='m-chat'&&!chatDone()){$('hint').textContent='要把對話看完才能關掉喔 ♡';const w=m.querySelector('.win');w.classList.remove('nope');void w.offsetWidth;w.classList.add('nope');return;}
+    m.classList.remove('open');if(m.id==='m-chat')afterChatClose();}}));
 
 /* 聊天：對方訊息自動傳來，沒點開時通知停在畫面上方；輪到我方就停住等點一下 */
 let ci=0,running=false,unread=0,started=false;
@@ -426,21 +434,25 @@ $('tAv').appendChild(mkAv('a'));
 const isOpen=()=>cm.classList.contains('open');
 const waitingMe=()=>ci<CHAT.length&&CHAT[ci][0]==='me'&&!running;
 const down=()=>{winEl.scrollTop=winEl.scrollHeight};
-const updateHint=()=>{$('hint').textContent=waitingMe()?'click · 點一下回覆':'';};
+const chatDone=()=>ci>=CHAT.length&&!running;
+const updateHint=()=>{$('hint').textContent=waitingMe()?'click · 點一下回覆':'';cm.classList.toggle('mustread',!chatDone());};
 function mkRow(w){const r=document.createElement('div');r.className='crow'+(w==='me'?' me':'');r.appendChild(mkAv(w));return r;}
 function addBubble(w,t){const r=mkRow(w),d=document.createElement('div');d.className='b'+(w==='me'?' me':'');
   if(t&&typeof t==='object'&&t.type==='sticker'){d.classList.add('sticker-bubble');const im=new Image();im.src=t.src;im.alt='貼圖';d.appendChild(im);}
   else d.textContent=t;
   r.appendChild(d);chat.appendChild(r);down();}
+let vibT=0;
+function startVib(){if(vibT)return;const go=()=>{try{navigator.vibrate&&navigator.vibrate([90,60,90])}catch(e){}};go();vibT=setInterval(go,1800);}
+function stopVib(){clearInterval(vibT);vibT=0;toast.classList.remove('shake');try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
 function notify(t){if(isOpen())return;unread++;$('tText').textContent=typeof t==='object'?'傳了一張貼圖':t;
-  $('tBadge').textContent=unread;$('tBadge').style.display=unread>1?'flex':'none';toast.classList.add('show');}
+  $('tBadge').textContent=unread;$('tBadge').style.display='flex';toast.classList.add('show','shake');document.body.classList.add('hasToast');startVib();}
 function step(){
   if(ci>=CHAT.length||CHAT[ci][0]==='me'){running=false;updateHint();return;}
   const[w,t]=CHAT[ci];const deliver=()=>{ci++;addBubble(w,t);notify(t);setTimeout(step,1800);};
   if(isOpen()){const ty=mkRow('a'),tb=document.createElement('div');tb.className='b typing';tb.innerHTML='<i></i><i></i><i></i>';ty.appendChild(tb);chat.appendChild(ty);down();
     setTimeout(()=>{ty.remove();deliver();},800);}else deliver();}
 function startChat(){if(started||!CHAT.length)return;started=true;running=true;step();}
-toast.onclick=()=>{cm.classList.add('open');unread=0;$('tBadge').style.display='none';toast.classList.remove('show');down();updateHint();};
+toast.onclick=()=>{cm.classList.add('open');unread=0;$('tBadge').style.display='none';toast.classList.remove('show');stopVib();document.body.classList.remove('hasToast');down();updateHint();};
 function afterChatClose(){if(waitingMe()){$('tBadge').style.display='none';toast.classList.add('show');}}
 winEl.addEventListener('click',e=>{if(e.target.hasAttribute('data-close'))return;
   if(waitingMe()){const[w,t]=CHAT[ci++];addBubble(w,t);running=true;updateHint();setTimeout(step,900);}});
@@ -741,10 +753,10 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
 
   /* ---- 顯示相簿（分類分頁；順序用「調整順序」手動決定，新增的卡片排在最後） ---- */
   let rows=[],curCat='ALL';
-  const CATS=['LD','SD','uori','Gift Art','Yume goods']; /* 分類名稱，想改就改這裡 */
-  const inCat=r=>curCat==='ALL'||r.category===curCat;
-  function cardEl(row){const d=document.createElement('div');const th=gURL(row.thumb),adm=!!A.get();d.className='item'+(row.locked?' locked':'')+(row.locked&&!adm?' lockedv':'');
-    d.innerHTML=`<div class="im">${th?`<img src="${th}" alt="" loading="lazy">`:''}${row.locked?'<span class="lockb">🔒</span>':''}${row.locked&&!adm?'<span class="soon">to be soon</span>':''}</div><div class="t"><h3>${esc(row.title)}</h3>${row.scene?`<p class="txt">${esc(row.scene)}</p>`:''}${row.date?`<span class="dt">${esc(row.date)}</span>`:''}</div>`;
+  const CATS=['LD','SD','uori','Gift Art','Yume goods','🐶🐰']; /* 分類名稱，想改就改這裡 */
+  const inCat=r=>curCat==='ALL'?r.category!=='Yume goods':r.category===curCat; /* ALL 不顯示 Yume goods */
+  function cardEl(row){const d=document.createElement('div');const th=gURL(row.thumb),adm=!!A.get();d.className='item'+(row.locked?' locked lockedv':'');
+    d.innerHTML=`<div class="im">${th?`<img src="${th}" alt="" loading="lazy">`:''}${row.locked?'<span class="soon">to be soon</span>':''}</div><div class="t"><h3>${esc(row.title)}</h3>${row.scene?`<p class="txt">${esc(row.scene)}</p>`:''}${row.date?`<span class="dt">${esc(row.date)}</span>`:''}</div>`;
     d.onclick=()=>openGal(row);return d;}
   function renderTabs(){const c=$('cats');c.textContent='';['ALL',...CATS].forEach(n=>{const b=document.createElement('button');b.textContent=n;b.className=n===curCat?'on':'';b.onclick=()=>{curCat=n;renderTabs();renderGrid();};c.appendChild(b);});}
   function renderGrid(){const g=$('grid');g.textContent='';const list=rows.filter(inCat);
