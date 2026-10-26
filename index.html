@@ -85,6 +85,11 @@ body{margin:0;min-height:100vh;color:var(--ink);background:transparent;text-alig
 .qa{padding:14px 12px;margin-bottom:12px}.qa h3{margin:0 0 10px;font-size:.82rem;font-weight:500;color:#fff4f8}
 .qa h3 b{margin-right:6px;color:#f3cfe0}.pair .ans{background:#fff;color:var(--deep);border-radius:14px;padding:8px 10px;font-size:.82rem;line-height:1.6}
 .ans:last-child{background:#f6e3ed}.who{display:block;margin-bottom:2px;font-size:.58rem;letter-spacing:.12em;color:#a595c0}
+.qavs{display:flex;align-items:center;justify-content:center;gap:56px;margin:0 0 16px}
+.qavs img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #fff;background:#eadff0}
+.qavs img[src=""]{display:none}
+.qavs b{font-size:.7rem;letter-spacing:.1em;color:#fff4f8}
+
 /* 相簿 */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .item{position:relative;background:#fff;color:var(--deep);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
@@ -293,7 +298,9 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
     </div>
   </section>
   <section class="page" id="p-gallery"><div class="cats" id="cats"></div><div class="grid" id="grid"></div><div class="galfoot"><button id="admBtn">✎ 管理</button></div><div class="admbar" id="admBar" hidden><button class="btn" id="admNew">＋ 新增卡片</button><button class="btn" id="admOrd">調整順序</button><button class="btn" id="admOut">登出</button></div></section>
-  <section class="page" id="p-qa"><div class="qh">✦ COUPLE Q&amp;A ✦</div><div id="qaList"></div></section>
+ <div class="qh">✦ COUPLE Q&amp;A ✦</div>
+<div class="qavs"><img id="qaL" alt=""><b>VS</b><img id="qaR" alt=""></div>
+
 </div>
 
 <div class="toast" id="toast"><span id="tAv" style="flex:0 0 auto;width:auto"></span><div style="flex:1;min-width:0"><b id="tName"></b><span id="tText"></span></div><i id="tBadge"></i></div>
@@ -382,7 +389,12 @@ const CARDS=[ // img 留空＝只顯示文字卡片
  {img:"",title:"第二張卡片",scene:"另一句說明。",date:"2026.02.14",story:"第二張的完整內容。"},
  {img:"",title:"第三張卡片",scene:"圖片可以是任何尺寸。",date:"2026.03.20",story:"第三張的完整內容。"},
  {img:"",title:"第四張卡片",scene:"想加幾張就複製一行。",date:"2026.04.01",story:"第四張的完整內容。"}];
-const QA=[{q:"第一次見面的印象？"},{q:"最喜歡對方哪裡？"},{q:"如果只能去一個地方約會？"},{q:"想對對方說的話"}].map(x=>({...x,a:["回答寫這裡","回答寫這裡"]}));
+const QA=[
+ {q:"第一次見面的印象？",a:["帥是帥但超可怕超級大隻要抬頭才看得到他，而且感覺很兇，很不好惹的感覺。","很小隻但聲音很有力量，很好奇這麼小的身體是怎麼發出那麼強大的能量的。"]},
+ {q:"最喜歡對方哪裡？",a:["小魚的回答","牛島的回答"]},
+ {q:"如果只能去一個地方約會？",a:["小魚的回答","牛島的回答"]},
+ {q:"想對對方說的話",a:["小魚的回答","牛島的回答"]}];
+
 const CHAT=[["a","下班了嗎？"],["a","我買了一點你愛吃的東西，車停在公司側門，慢慢來我等你。"],["me","好꒰ᐢ٭°̧̧̧ω°̧̧̧٭ᐢ꒱"],["me",{type:"sticker",src:"photo/tt.PNG"}]];
 /* ======================== */
 
@@ -422,7 +434,9 @@ if(SHEET.img){ /* 依序嘗試常見的副檔名（jpg/JPG/jpeg/png…），找�
 }
 MINI.forEach(m=>{const d=document.createElement('div');d.className='mrow';
   d.innerHTML=`<span class="lab">${esc(m.label)}</span>`+(m.both!=null?`<span class="both">${esc(m.both)}</span>`:`<div class="pair"><span>${esc(m.l)}</span><span>${esc(m.r)}</span></div>`);$('mini').appendChild(d);});
+$('qaL').src=AVATAR_ME;$('qaR').src=AVATAR_A;
 QA.forEach((x,i)=>{const d=document.createElement('div');d.className='card qa';
+  d.innerHTML=`<h3><b>Q${i+1}.</b>${esc(x.q)}</h3><div class="pair">${x.a.map(t=>`<div class="ans">${esc(t)}</div>`).join('')}</div>`;$('qaList').appendChild(d);});
   d.innerHTML=`<h3><b>Q${i+1}.</b>${esc(x.q)}</h3><div class="pair">${x.a.map((t,k)=>`<div class="ans"><span class="who">${esc((CHARS[k]||{}).name||'')}</span>${esc(t)}</div>`).join('')}</div>`;$('qaList').appendChild(d);});
 function addCard(c){const d=document.createElement('div');d.className='item';
   d.innerHTML=(c.img?`<img src="${c.img}" alt="">`:'')+`<div class="t"><h3>${esc(c.title)}</h3>${c.scene?`<p class="txt">${esc(c.scene)}</p>`:''}${c.date?`<span class="dt">${esc(c.date)}</span>`:''}</div>`;
