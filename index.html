@@ -298,8 +298,7 @@ nav button.on{background:rgba(255,255,255,.22);color:#fff;opacity:1}
     </div>
   </section>
   <section class="page" id="p-gallery"><div class="cats" id="cats"></div><div class="grid" id="grid"></div><div class="galfoot"><button id="admBtn">✎ 管理</button></div><div class="admbar" id="admBar" hidden><button class="btn" id="admNew">＋ 新增卡片</button><button class="btn" id="admOrd">調整順序</button><button class="btn" id="admOut">登出</button></div></section>
- <div class="qh">✦ COUPLE Q&amp;A ✦</div>
-<div class="qavs"><img id="qaL" alt=""><b>VS</b><img id="qaR" alt=""></div>
+  <section class="page" id="p-qa"><div class="qh">✦ COUPLE Q&amp;A ✦</div><div class="qavs"><img id="qaL" alt=""><b>VS</b><img id="qaR" alt=""></div><div id="qaList"></div></section>
 
 </div>
 
@@ -437,7 +436,6 @@ MINI.forEach(m=>{const d=document.createElement('div');d.className='mrow';
 $('qaL').src=AVATAR_ME;$('qaR').src=AVATAR_A;
 QA.forEach((x,i)=>{const d=document.createElement('div');d.className='card qa';
   d.innerHTML=`<h3><b>Q${i+1}.</b>${esc(x.q)}</h3><div class="pair">${x.a.map(t=>`<div class="ans">${esc(t)}</div>`).join('')}</div>`;$('qaList').appendChild(d);});
-  d.innerHTML=`<h3><b>Q${i+1}.</b>${esc(x.q)}</h3><div class="pair">${x.a.map((t,k)=>`<div class="ans"><span class="who">${esc((CHARS[k]||{}).name||'')}</span>${esc(t)}</div>`).join('')}</div>`;$('qaList').appendChild(d);});
 function addCard(c){const d=document.createElement('div');d.className='item';
   d.innerHTML=(c.img?`<img src="${c.img}" alt="">`:'')+`<div class="t"><h3>${esc(c.title)}</h3>${c.scene?`<p class="txt">${esc(c.scene)}</p>`:''}${c.date?`<span class="dt">${esc(c.date)}</span>`:''}</div>`;
   d.onclick=()=>openCard(c.title,c.img,c.date,esc(c.story||''));$('grid').appendChild(d);}
