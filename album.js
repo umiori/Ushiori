@@ -4,7 +4,7 @@
 (function(){
   /* ===== 可以改的設定 ===== */
   const TABLE_IMG="";   // 桌面圖片路徑，例如 "photo/table.jpg"；留空＝白色桌面
-  const CHARM_IMG="";   // 右邊吊飾的照片路徑，例如 "photo/charm.jpg"；留空＝先放一個愛心框
+  const CHARM_IMG="photo/charm.png";   // 吊飾圖片路徑（把 charm.png 放進 photo 資料夾）；留空＝不顯示
   const PROPS=[];       // 桌上的小雜物（透明 PNG），例如 [{img:"photo/lav.png",css:"top:6px;right:4px;width:110px;transform:rotate(20deg)"}]；留空＝用內建的薰衣草和小花
   /* ======================== */
   const $=id=>document.getElementById(id);
@@ -14,14 +14,14 @@
   const css=`
   #p-gallery #grid{display:none}
   #album{--bw:min(340px,calc(100vw - 64px));--pw:calc(var(--bw)/2);--ph:calc(var(--pw)*1.4);position:relative;margin:0 6px 10px;padding:8px 0 16px;border-radius:18px;overflow:hidden;
-    background:${TABLE_IMG?`url("${TABLE_IMG}") center/cover`:`radial-gradient(ellipse at 30% 10%,#fff 0,#f7f3fa 55%,#ece5f2 100%)`};box-shadow:inset 0 2px 10px rgba(120,100,150,.18)}
-  #album .props{position:absolute;inset:0;pointer-events:none;z-index:5}
+    background:${TABLE_IMG?`url("${TABLE_IMG}") center/cover`:`repeating-linear-gradient(115deg,transparent 0 70px,rgba(255,255,255,.5) 70px 120px),linear-gradient(180deg,#e9def4 0,#f3ecf8 130px,#fbf9fd 210px,#fff 100%)`};box-shadow:inset 0 2px 10px rgba(120,100,150,.18)}
+  #album .props{position:absolute;inset:0;pointer-events:none;z-index:1}
   #album .props>*{position:absolute}
-  #album .persp{perspective:1100px;display:flex;justify-content:center;padding:76px 0 34px}
-  #album .tilt{transform:rotateX(24deg) rotateZ(-4deg);transform-style:preserve-3d}
+  #album .persp{perspective:1100px;display:flex;justify-content:center;padding:128px 0 40px;position:relative;z-index:2}
+  #album .tilt{transform:rotateX(18deg) rotateZ(-3deg);transform-style:preserve-3d}
   #album .book{position:relative;width:var(--bw);height:var(--ph);transform-style:preserve-3d}
-  #album .book::before{content:"";position:absolute;inset:-7px;background:#c9b3e0;border-radius:7px;box-shadow:0 16px 24px rgba(90,70,120,.4);transform:translateZ(-2px)}
-  #album .pg{position:absolute;top:0;width:var(--pw);height:var(--ph);background:#f3ecf8;color:#5b4358;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 10px;text-align:center}
+  #album .book::before{content:"";position:absolute;inset:-7px;background:#bda4dd;border-radius:7px;box-shadow:5px 4px 0 #e4d9f0,8px 7px 0 #d6c8e8,0 18px 26px rgba(110,85,150,.35);transform:translateZ(-2px)}
+  #album .pg{position:absolute;top:0;width:var(--pw);height:var(--ph);background:#f8f4fb;color:#5b4358;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 10px;text-align:center}
   #album .pg.L{left:0;box-shadow:inset -16px 0 14px -12px rgba(100,80,140,.3);border-radius:4px 0 0 4px}
   #album .pg.R{left:50%;box-shadow:inset 16px 0 14px -12px rgba(100,80,140,.3);border-radius:0 4px 4px 0}
   #album .leaf{position:absolute;left:50%;top:0;width:var(--pw);height:var(--ph);transform-origin:left center;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,.1,.2,1)}
@@ -40,6 +40,13 @@
   #album .anav button{width:34px;height:34px;border:0;border-radius:50%;background:#e6d9f2;color:#5b4358;font-size:1rem;cursor:pointer;padding:0}
   #album .anav button:disabled{opacity:.35}
   #album .empty{padding:60px 20px;color:#7a5a82;font-size:.8rem}
+  .cl{position:absolute;background:linear-gradient(145deg,#fff,#e9e0f3);box-shadow:inset -3px -4px 8px rgba(150,125,185,.28),inset 3px 3px 6px #fff,0 8px 12px rgba(130,105,170,.28);border-radius:8px}
+  .cl.lv{background:linear-gradient(145deg,#e8dbf7,#b79fdc)}.cl.pk{background:linear-gradient(145deg,#fde8f1,#f0b9d2)}
+  .cl.mug{border-radius:6px 6px 16px 16px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+  .cl.mug::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:9px;border-radius:50%;background:#c9a98f}
+  .cl.mug::after{content:"";position:absolute;right:-12px;top:8px;width:14px;height:16px;border:5px solid #ece4f5;border-left:0;border-radius:0 12px 12px 0}
+  .cl.dr{background:repeating-linear-gradient(0deg,transparent 0 19px,rgba(150,125,185,.3) 19px 21px),linear-gradient(145deg,#fff,#ebe3f5)}
+  #album .charm2{position:absolute;z-index:7;top:150px;right:-2px;width:128px;transform-origin:50% 0;animation:asway 3.5s ease-in-out infinite alternate;filter:drop-shadow(0 6px 6px rgba(110,85,150,.3));pointer-events:none}
   @keyframes asway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
   #album .bk{width:96px;height:20px;border-radius:3px;left:0;box-shadow:0 2px 4px rgba(90,70,120,.3)}
   #album .bk::after{content:"";position:absolute;right:4px;top:3px;bottom:3px;width:70%;border-radius:2px;background:repeating-linear-gradient(0deg,#fff 0 2px,#eadff3 2px 3px)}
@@ -63,9 +70,15 @@
   $('cats').insertAdjacentElement('afterend',al);
   const props=al.querySelector('.props');
   if(PROPS.length)PROPS.forEach(p=>{const im=document.createElement('img');im.src=p.img;im.alt='';im.style.cssText=p.css||'';props.appendChild(im);});
-  else{props.insertAdjacentHTML('beforeend','<div style="top:8px;left:8px;width:100px;height:66px"><div class="bk" style="top:44px;background:#c3a9e0;transform:rotate(-2deg)"></div><div class="bk" style="top:25px;left:6px;width:88px;background:#f4bfd4;transform:rotate(3deg)"></div><div class="bk" style="top:7px;left:2px;width:80px;background:#d7c4ee;transform:rotate(-4deg)"></div></div>');}
-  /* 右邊的吊飾照片 */
-  props.insertAdjacentHTML('beforeend','<div class="charm"><div class="st"></div><div class="fr">'+(CHARM_IMG?'<img src="'+CHARM_IMG+'" alt="">':'<div>♡</div>')+'</div></div>');
+  else props.insertAdjacentHTML('beforeend',
+    '<div class="cl lv" style="left:8px;top:34px;width:112px;height:76px;border-radius:10px 10px 4px 4px;transform:perspective(300px) rotateY(18deg);display:flex;align-items:center;justify-content:center;font-size:1.2rem">🐰</div>'+
+    '<div class="cl mug" style="left:132px;top:66px;width:44px;height:40px">🎀</div>'+
+    '<div class="cl lv" style="left:196px;top:30px;width:22px;height:78px;border-radius:4px"></div>'+
+    '<div class="cl" style="left:220px;top:22px;width:24px;height:86px;border-radius:4px"></div>'+
+    '<div class="cl pk" style="left:246px;top:34px;width:22px;height:74px;border-radius:4px"></div>'+
+    '<div class="cl dr" style="left:284px;top:46px;width:86px;height:62px"></div>'+
+    '<div class="cl lv" style="left:296px;top:10px;width:34px;height:42px;border-radius:5px;border:3px solid #fff"></div>');
+  if(CHARM_IMG){const c=document.createElement('img');c.className='charm2';c.src=CHARM_IMG;c.alt='';al.appendChild(c);}
 
   let rows=[],leaves=[],L=0,f=0,busy=false;
   const book=$('abook');
