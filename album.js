@@ -5,6 +5,7 @@
    用法：index.html 最後 </body> 前面有 <script src="album.js"></script> 就好（取代舊的 album.js） */
 (function(){
   const ALBUM_ORDER=['ALL','LD','SD','uori','🐶🐰','Gift Art'];   // 選集裡相簿的順序，想改就改這裡
+  const FEATURED=[];   // 轉盤精選：填卡片標題，留空＝全部。不知道怎麼填？網址後面加 #pick，勾選後會產生這一行
   const $=id=>document.getElementById(id);
   const pg=$('p-gallery');
   const SBU=SB_URL.replace(/\/$/,''),NAME_RE=/^[A-Za-z0-9_-]{6,60}\.jpg$/;
@@ -44,6 +45,18 @@
   #ordList .ordrow{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:background .15s,transform .15s}
   #ordList .ordrow.dragging{background:#f3e6f6;transform:scale(1.03);box-shadow:0 3px 10px rgba(100,70,140,.35);border-radius:10px}`;
   document.head.appendChild(st);
+  const st3=document.createElement('style');st3.textContent=`
+  #gpick{position:fixed;inset:0;z-index:90;background:#fbf3f7;color:#5b4358;display:flex;flex-direction:column;text-align:left}
+  #gpick .pk1{display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 14px 8px;background:#ecdcee;font-size:.85rem}
+  #gpick .pk1 button{width:28px;height:28px;border:0;border-radius:8px;background:#fff;color:#5b4358;cursor:pointer;padding:0}
+  #gpick .pkl{flex:1;overflow:auto;padding:6px 14px}
+  #gpick label{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #eee;font-size:.82rem}
+  #gpick label img{width:46px;height:46px;object-fit:cover;border-radius:8px;background:#ddd;flex:0 0 46px}
+  #gpick label small{display:block;opacity:.6;font-size:.68rem}
+  #gpick .pkf{padding:8px 14px calc(14px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #eadff0}
+  #gpick textarea{width:100%;height:64px;font-size:11px;border:1px solid #d8c9ee;border-radius:8px;padding:6px}
+  #gpick .pkf button{margin-top:6px;border:0;border-radius:99px;padding:7px 16px;background:#fbeaf1;color:#7a5a82;cursor:pointer}`;
+  document.head.appendChild(st3);
 
   /* ===== 環形轉盤：前面最大，後面的圖淡淡的還在；不自動轉，手指好轉、放手有慣性 ===== */
   function Carousel(host,opt){
@@ -96,13 +109,15 @@
     return{set};}
 
   /* 打開卡片：直接用你原本相簿的卡片視窗（分類沒顯示的話先切過去再切回來） */
-  let quiet=0;
+  let quiet=0,ctx=null,ctxIdx=0,viaLib=false,libRows=[];
+  const gridItems=()=>[...document.querySelectorAll('#grid .item')];
+  const fire=it=>{viaLib=true;it.click();viaLib=false;};
   const tabBtns=()=>[...document.querySelectorAll('#cats button')];
   function openOriginal(row){
     const find=()=>[...document.querySelectorAll('#grid .item')].find(e=>{const h=e.querySelector('h3');return h&&h.textContent===row.title;});
-    let it=find();if(it){it.click();return;}
+    let it=find();if(it){fire(it);return;}
     const tabs=tabBtns(),prev=tabs.find(b=>b.classList.contains('on')),tab=tabs.find(b=>b.textContent===row.category);
-    if(!tab)return;quiet=Date.now()+900;tab.click();it=find();if(it)it.click();
+    if(!tab)return;quiet=Date.now()+900;tab.click();it=find();if(it)fire(it);
     if(prev&&prev!==tab){const back=tabBtns().find(b=>b.textContent===prev.textContent);if(back)back.click();}}
   const domThumb=row=>{const it=[...document.querySelectorAll('#grid .item')].find(e=>{const h=e.querySelector('h3');return h&&h.textContent===row.title;});const im=it&&it.querySelector('img');return im?im.getAttribute('src'):'';};
 
@@ -123,8 +138,11 @@
   /* ===== 資料與畫面 ===== */
   let rows=[];
   const itemOf=r=>({row:r,srcs:()=>[gURL(r.photos&&r.photos[0]),gURL(r.thumb),domThumb(r)]});
-  const lib=Carousel($('lcv'),{count:t=>{$('lcn').textContent=t;},open:openOriginal});
-  function showLib(){lib.set(rows.filter(r=>r.category!=='Gift Art'&&!r.locked).map(itemOf));}
+  const lib=Carousel($('lcv'),{count:t=>{$('lcn').textContent=t;},open:row=>{ctx=libRows;ctxIdx=libRows.indexOf(row);openOriginal(row);}});
+  function libList(){
+    if(FEATURED.length){const out=[];FEATURED.forEach(t=>{const r=rows.find(x=>x.title===t&&!x.locked);if(r&&!out.includes(r))out.push(r);});if(out.length)return out;}
+    return rows.filter(r=>r.category!=='Gift Art'&&!r.locked);}
+  function showLib(){libRows=libList();lib.set(libRows.map(itemOf));}
 
   function openAlbum(name){const tab=tabBtns().find(b=>b.textContent===name);quiet=Date.now()+900;
     if(tab&&!tab.classList.contains('on'))tab.click();pg.classList.add('det');scrollTo(0,0);}
@@ -144,10 +162,22 @@
     else{const q=name=>fetch(SBU+'/rest/v1/'+name+'?select=*&order=sort.asc,id.asc&limit=200',{headers:{apikey:SB_KEY}});
       let all=null;try{let r=await q('gallery_public');if(!r.ok)r=await q('gallery');if(r.ok)all=await r.json();}catch(e){}
       rows=all||[];}
-    showLib();renderCol();}
+    showLib();renderCol();if(location.hash==='#pick')openPicker();}
   let tm=0;
   new MutationObserver(()=>{if(Date.now()<quiet)return;clearTimeout(tm);tm=setTimeout(refresh,150);}).observe($('grid'),{childList:true});
   refresh();
+
+  /* ===== 卡片視窗左右箭頭：上一張／下一張（從轉盤打開就照轉盤順序，從相簿格子打開就照格子順序） ===== */
+  $('grid').addEventListener('click',e=>{const it=e.target.closest&&e.target.closest('.item');if(!it||viaLib)return;ctx=null;ctxIdx=gridItems().indexOf(it);},true);
+  const arSt=document.createElement('style');
+  arSt.textContent='.gar{position:fixed;top:50%;z-index:55;width:40px;height:40px;margin-top:-20px;border:0;border-radius:50%;background:rgba(255,255,255,.88);color:#5b4358;font-size:1.4rem;line-height:1;padding:0 0 3px;cursor:pointer;box-shadow:0 3px 10px rgba(60,30,80,.35);display:none}#garL{left:6px}#garR{right:6px}body.galopen .gar{display:block}';
+  document.head.appendChild(arSt);
+  [['garL','‹',-1],['garR','›',1]].forEach(([id,t,d])=>{const b=document.createElement('button');b.type='button';b.id=id;b.className='gar';b.textContent=t;b.setAttribute('aria-label',d<0?'上一張':'下一張');
+    b.onclick=()=>{if(ctx&&ctx.length){ctxIdx=(ctxIdx+d+ctx.length)%ctx.length;openOriginal(ctx[ctxIdx]);}
+      else{const its=gridItems();if(!its.length)return;ctxIdx=(ctxIdx+d+its.length)%its.length;its[ctxIdx].click();}};
+    document.body.appendChild(b);});
+  const mg=$('m-gal');
+  if(mg)new MutationObserver(()=>document.body.classList.toggle('galopen',mg.classList.contains('open'))).observe(mg,{attributes:true,attributeFilter:['class']});
 
   /* ===== 管理「調整順序」：長按一列就能拖曳 ===== */
   (function(){
@@ -171,4 +201,19 @@
     box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);
     document.addEventListener('touchmove',e=>{if(drag)e.preventDefault();},{passive:false});
   })();
+
+  /* ===== 精選挑選器：網址後面加 #pick，勾選要在轉盤出現的照片，複製產生的那一行貼回最上面 FEATURED ===== */
+  function openPicker(){if($('gpick'))return;
+    const sel=[...FEATURED],ov=document.createElement('div');ov.id='gpick';
+    ov.innerHTML='<div class="pk1"><span>勾選要在轉盤出現的照片（依勾選順序）</span><button type="button" id="pkx">✕</button></div><div class="pkl" id="pkl"></div><div class="pkf"><textarea id="pkt" readonly></textarea><button type="button" id="pkc">複製這一行</button> <span id="pks" style="font-size:.7rem"></span></div>';
+    document.body.appendChild(ov);
+    const ta=$('pkt'),upd=()=>{ta.value='const FEATURED='+JSON.stringify(sel)+';';};
+    rows.filter(r=>!r.locked).forEach(r=>{const lb=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.checked=sel.includes(r.title);
+      cb.onchange=()=>{const i=sel.indexOf(r.title);if(cb.checked&&i<0)sel.push(r.title);if(!cb.checked&&i>=0)sel.splice(i,1);upd();};
+      const im=document.createElement('img');im.src=gURL(r.thumb)||gURL(r.photos&&r.photos[0]);im.alt='';
+      const t=document.createElement('span');t.textContent=r.title||'';const sm=document.createElement('small');sm.textContent=(r.category||'')+' '+(r.date||'');t.appendChild(sm);
+      lb.append(cb,im,t);$('pkl').appendChild(lb);});
+    upd();
+    $('pkc').onclick=()=>{try{navigator.clipboard.writeText(ta.value).then(()=>{$('pks').textContent='已複製';});}catch(e){ta.select();document.execCommand('copy');$('pks').textContent='已複製';}};
+    $('pkx').onclick=()=>ov.remove();}
 })();
