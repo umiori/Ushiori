@@ -20,7 +20,7 @@
   #gback button{border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:6px 14px;font-size:.78rem;color:var(--ink);background:rgba(255,255,255,.2);cursor:pointer}
   #p-gallery.det #gback{display:block}
   #p-gallery.det #gmode,#p-gallery.det #album{display:none}
-  #p-gallery:not(.det) #cats,#p-gallery:not(.det) #grid,#p-gallery:not(.det) .galfoot,#p-gallery:not(.det) .admbar{display:none!important}
+  #p-gallery #cats,#p-gallery:not(.det) #grid,#p-gallery:not(.det) .galfoot,#p-gallery:not(.det) .admbar{display:none!important}
   #album{padding:0 16px}
   #album .gpv{display:block;width:100%}
   #album .gpv[hidden]{display:none}
