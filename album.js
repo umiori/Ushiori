@@ -114,7 +114,7 @@
   pg.insertBefore(bar,pg.firstChild);
   const back=document.createElement('div');back.id='gback';back.innerHTML='<button type="button" id="gbt">‹ 選集</button>';bar.after(back);
   const al=document.createElement('div');al.id='album';
-  al.innerHTML=`<div class="gpv" id="vlib"><div id="lcv"></div><div class="gcc"><span id="lcn"></span><span>左右拖曳旋轉，點中間那張打開</span></div></div><div class="gpv" id="vcol" hidden></div>`;
+  al.innerHTML=`<div class="gpv" id="vlib"><div id="lcv"></div><div class="gcc"><span id="lcn"></span><span>左右拖曳旋轉，點擊照片可觀看全圖or文（不一定有）</span></div></div><div class="gpv" id="vcol" hidden></div>`;
   back.after(al);
   bar.querySelectorAll('button').forEach(b=>b.onclick=()=>{const t=b.dataset.t;
     bar.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('vlib').hidden=t!=='lib';$('vcol').hidden=t!=='col';});
