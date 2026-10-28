@@ -683,9 +683,12 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
   const modal=$('m-game'),ov=$('gov'),ovT=$('govT'),ovB=$('govB'),hud=$('ghud'),bar=$('gbar');
   const mk=(src,emoji)=>{const o={img:null,emoji};if(src){const i=new Image();i.onload=()=>{o.img=i};i.src=src;}return o;};
-  const ME=mk(typeof AVATAR_ME!=='undefined'?AVATAR_ME:'','🐟'), HIM=mk(typeof AVATAR_A!=='undefined'?AVATAR_A:'','🐮');
+  const IMGB='photo/';   // 圖片所在資料夾，檔案放別的地方就改這裡
+const ld=n=>{const o={img:null};const i=new Image();i.onload=()=>{o.img=i};i.src=IMGB+n;return o;};
+const FISH=ld('flyuori.PNG'),CATCH=ld('flyushi.PNG'),BOTH=ld('fly.PNG');
+const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
   const BG={img:null};{const i=new Image();i.onload=()=>{BG.img=i};i.src=(typeof GAME_BG!=='undefined'?GAME_BG:'');}
-  const LEN=2600,PR=15,GY=H-34,TYPES=[{e:'🏐',r:15,amp:0},{e:'🐦',r:14,amp:28},{e:'☁️',r:20,amp:14},{e:'⚡',r:14,amp:0}];
+  const LEN=2600,PR=15,GY=H-34,TYPES=XG.map((o,i)=>({o,r:16,amp:[0,28,14,0,22,0,10][i]}));
   let st='idle',raf=0,last=0,x=W/2,tx=W/2,py=90,dist=0,lives=3,inv=0,obs=[],spawn=0,phase='fall',ux=W/2,parts=[],t0=0,tEnd=0;
 
   function bgRate(){if(BG.img){const ih=BG.img.height*W/BG.img.width;return Math.max(0,ih-H)/LEN;}return .43;} // 背景捲動速度（牛島跟背景一起升起）
@@ -694,7 +697,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   function show(t,b){ovT.innerHTML=t;ovB.textContent=b;ov.style.display='flex';}
   function start(){reset();st='play';ov.style.display='none';t0=performance.now();}
   function addObs(){const t=TYPES[Math.floor(Math.random()*TYPES.length)],bx=22+Math.random()*(W-44);
-    obs.push({e:t.e,r:t.r,amp:t.amp,bx,x:bx,y:H+24,t:Math.random()*6});}
+    obs.push({o:t.o,r:t.r,amp:t.amp,bx,x:bx,y:H+24,t:Math.random()*6});}
   function burst(cx,cy,n,em){for(let i=0;i<n;i++)parts.push({x:cx,y:cy,vx:(Math.random()-.5)*120,vy:-30-Math.random()*90,l:1,e:em});}
   function miss(){lives--;inv=1.4;setHud();if(lives<=0){st='lose';show('掉得太遠了⋯<br>再試一次吧','再玩一次');}}
 
@@ -729,6 +732,7 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
     ctx.restore();ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.lineWidth=2.5;ctx.strokeStyle=ring;ctx.stroke();
   }
   function emoji(e,cx,cy,size,a){ctx.save();ctx.globalAlpha=a==null?1:a;ctx.font=size+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';ctx.fillText(e,cx,cy);ctx.restore();}
+  function pic(o,cx,cy,h){if(!o.img)return;const w=h*o.img.width/o.img.height;ctx.drawImage(o.img,cx-w/2,cy-h/2,w,h);}
 
   function draw(ts){
     if(BG.img){const s=W/BG.img.width,ih=BG.img.height*s,off=Math.min(1,dist/LEN)*Math.max(0,ih-H);
@@ -739,15 +743,14 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
       ctx.fillStyle='rgba(255,255,255,.16)';ctx.beginPath();ctx.arc(cx,cy,16,0,7);ctx.arc(cx+16,cy+4,12,0,7);ctx.arc(cx-15,cy+5,11,0,7);ctx.fill();}
     }
     const uy=GY+Math.max(0,LEN-dist)*bgRate();
-    if(uy<H+70){ // 牛島跟著鏡頭往下，慢慢從畫面下方出現，雙手張開
-      ctx.strokeStyle='#fbeaf1';ctx.lineWidth=6;ctx.lineCap='round';
-      ctx.beginPath();ctx.moveTo(ux-16,uy-4);ctx.quadraticCurveTo(ux-40,uy-8,ux-36,uy-42);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(ux+16,uy-4);ctx.quadraticCurveTo(ux+40,uy-8,ux+36,uy-42);ctx.stroke();
-      avatar(HIM,ux,uy-14,22,'#fff');
-      ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillRect(0,uy+14,W,Math.max(0,H-uy-14));
+    if(uy<H+70){
+  if(st==='win'&&BOTH.img)pic(BOTH,ux,uy-34,82);
+  else pic(CATCH,ux,uy-30,74);
+  ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillRect(0,uy+14,W,Math.max(0,H-uy-14));
     }
-    obs.forEach(o=>emoji(o.e,o.x,o.y,o.r*2));
-    if(!(inv>0&&Math.floor(ts*12)%2))avatar(ME,x,py,PR,'#fff');
+
+    obs.forEach(o=>pic(o.o,o.x,o.y,o.r*2));
+    if(st!=='win'&&!(inv>0&&Math.floor(ts*12)%2))pic(FISH,x,py,PR*3);
     parts.forEach(p=>emoji(p.e,p.x,p.y,16,Math.max(0,p.l)));
   }
   function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.033,(now-last)/1000||0);last=now;if(st==='play')update(dt);draw(now/1000);}
