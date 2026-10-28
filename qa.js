@@ -4,7 +4,7 @@
    題目和回答還是用 index.html 裡原本的 const QA=[...]，不用動。 */
 (function(){
   /* ===== 可以改的設定 ===== */
-  const QA_IMGS=['photo/qa1.png'];   // 每一題的插圖，依題號：['photo/qa1.png','photo/qa2.png','',...]。沒有圖的題目會放兩個頭像
+  const QA_IMGS=['photo/qa1.PNG'];   // 每一題的插圖，依題號：['photo/qa1.PNG','photo/qa2.png','',...]。沒有圖的題目會放兩個頭像
   const QA_FLIP=true;                // true＝左邊對話框是 QA 回答陣列的第 2 個（牛島），右邊是第 1 個（小魚）；插圖裡牛島在左邊的話維持 true
   /* ======================== */
   const sec=document.getElementById('p-qa');
