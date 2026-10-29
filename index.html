@@ -688,7 +688,7 @@ const ld=n=>{const o={img:null,sx:0,sy:0,sw:1,sh:1};const i=new Image();i.onload
 const FISH=ld('flyushi.PNG'),CATCH=ld('flyuori.PNG'),BOTH=ld('fly.PNG');
 const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
   const BG={img:null};{const i=new Image();i.onload=()=>{BG.img=i};i.src=(typeof GAME_BG!=='undefined'?GAME_BG:'');}
-  const LEN=2600,PR=15,GY=H-34,TYPES=XG.map((o,i)=>({o,r:16,amp:[0,28,14,0,22,0,10][i]}));
+  const LEN=2600,PR=15,GY=H-34,RS=[11,11,11,11,16,8,11],WT=[.5,.5,.5,.5,1,1,1],TYPES=XG.map((o,i)=>({o,r:RS[i],w:WT[i],amp:[0,28,14,0,22,0,10][i]}));
   let st='idle',raf=0,last=0,x=W/2,tx=W/2,py=90,dist=0,lives=3,inv=0,obs=[],spawn=0,phase='fall',ux=W/2,parts=[],t0=0,tEnd=0;
 
   function bgRate(){if(BG.img){const ih=BG.img.height*W/BG.img.width;return Math.max(0,ih-H)/LEN;}return .43;} // 背景捲動速度（牛島跟背景一起升起）
@@ -696,7 +696,7 @@ const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
   function reset(){x=tx=W/2;py=90;dist=0;lives=3;inv=0;obs=[];spawn=0;phase='fall';ux=50+Math.random()*(W-100);parts=[];setHud();}
   function show(t,b){ovT.innerHTML=t;ovB.textContent=b;ov.style.display='flex';}
   function start(){reset();st='play';ov.style.display='none';t0=performance.now();}
-  function addObs(){const t=TYPES[Math.floor(Math.random()*TYPES.length)],bx=22+Math.random()*(W-44);
+  function addObs(){let q=Math.random()*TYPES.reduce((s,a)=>s+a.w,0),t=TYPES[TYPES.length-1];for(const a of TYPES){q-=a.w;if(q<=0){t=a;break;}}const bx=22+Math.random()*(W-44);
     obs.push({o:t.o,r:t.r,amp:t.amp,bx,x:bx,y:H+24,t:Math.random()*6});}
   function burst(cx,cy,n,em){for(let i=0;i<n;i++)parts.push({x:cx,y:cy,vx:(Math.random()-.5)*120,vy:-30-Math.random()*90,l:1,e:em});}
   function miss(){lives--;inv=1.4;setHud();if(lives<=0){st='lose';show('掉得太遠了⋯<br>再試一次吧','再玩一次');}}
