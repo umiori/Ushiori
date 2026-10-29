@@ -684,8 +684,8 @@ function asciiDataURL(src,cols,cell,cb){const im=new Image();
   const modal=$('m-game'),ov=$('gov'),ovT=$('govT'),ovB=$('govB'),hud=$('ghud'),bar=$('gbar');
   const mk=(src,emoji)=>{const o={img:null,emoji};if(src){const i=new Image();i.onload=()=>{o.img=i};i.src=src;}return o;};
   const IMGB='photo/';   // 圖片所在資料夾，檔案放別的地方就改這裡
-const ld=n=>{const o={img:null};const i=new Image();i.onload=()=>{o.img=i};i.src=IMGB+n;return o;};
-const FISH=ld('flyuori.PNG'),CATCH=ld('flyushi.PNG'),BOTH=ld('fly.PNG');
+const ld=n=>{const o={img:null,sx:0,sy:0,sw:1,sh:1};const i=new Image();i.onload=()=>{o.sw=i.naturalWidth;o.sh=i.naturalHeight;try{const k=Math.min(1,300/Math.max(o.sw,o.sh)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(o.sw*k));c.height=Math.max(1,Math.round(o.sh*k));const g=c.getContext('2d');g.drawImage(i,0,0,c.width,c.height);const d=g.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=-1,y1=-1;for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(d[(y*c.width+x)*4+3]>8){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}if(x1>=0){o.sx=Math.max(0,Math.floor(x0/k)-1);o.sy=Math.max(0,Math.floor(y0/k)-1);o.sw=Math.min(i.naturalWidth-o.sx,Math.ceil((x1-x0+1)/k)+2);o.sh=Math.min(i.naturalHeight-o.sy,Math.ceil((y1-y0+1)/k)+2);}}catch(e){}o.img=i;};i.src=IMGB+n;return o;};
+const FISH=ld('flyushi.PNG'),CATCH=ld('flyuori.PNG'),BOTH=ld('fly.PNG');
 const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
   const BG={img:null};{const i=new Image();i.onload=()=>{BG.img=i};i.src=(typeof GAME_BG!=='undefined'?GAME_BG:'');}
   const LEN=2600,PR=15,GY=H-34,TYPES=XG.map((o,i)=>({o,r:16,amp:[0,28,14,0,22,0,10][i]}));
@@ -711,8 +711,8 @@ const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
     }else{
       py+=Math.min(140,60+(py-90)*.5)*dt;
       if(py>=GY-52){
-        if(Math.abs(x-ux)<=40){st='win';tEnd=performance.now();py=GY-46;burst(ux,GY-50,22,'💗');
-          show('接住了 ♡<br><small>用時 '+((tEnd-t0)/1000).toFixed(1)+' 秒</small>','再玩一次');}
+        if(Math.abs(x-ux)<=40){st='won';tEnd=performance.now();py=GY-46;burst(ux,GY-75,22,'💗');
+  setTimeout(()=>{if(st==='won'){st='win';show('接住了 ♡<br><small>用時 '+((tEnd-t0)/1000).toFixed(1)+' 秒</small>','再玩一次');}},2000);}
         else{burst(x,GY-20,6,'💦');lives--;setHud();if(lives<=0){st='lose';show('沒有接到⋯<br>再試一次吧','再玩一次');}
           else{py=90;}}
       }
@@ -732,7 +732,7 @@ const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
     ctx.restore();ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.lineWidth=2.5;ctx.strokeStyle=ring;ctx.stroke();
   }
   function emoji(e,cx,cy,size,a){ctx.save();ctx.globalAlpha=a==null?1:a;ctx.font=size+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';ctx.fillText(e,cx,cy);ctx.restore();}
-  function pic(o,cx,cy,h){if(!o.img)return;const w=h*o.img.width/o.img.height;ctx.drawImage(o.img,cx-w/2,cy-h/2,w,h);}
+  function pic(o,cx,cy,h){if(!o.img)return;const w=h*o.sw/o.sh;ctx.drawImage(o.img,o.sx,o.sy,o.sw,o.sh,cx-w/2,cy-h/2,w,h);}
 
   function draw(ts){
     if(BG.img){const s=W/BG.img.width,ih=BG.img.height*s,off=Math.min(1,dist/LEN)*Math.max(0,ih-H);
@@ -744,16 +744,17 @@ const XG=['xg1','xg2','xg3','xg4','xg5','xg6','xg7'].map(n=>ld(n+'.PNG'));
     }
     const uy=GY+Math.max(0,LEN-dist)*bgRate();
     if(uy<H+70){
-  if(st==='win'&&BOTH.img)pic(BOTH,ux,uy-34,82);
-  else pic(CATCH,ux,uy-30,74);
+    if((st==='win'||st==='won')&&BOTH.img)pic(BOTH,ux,uy-19,82);
+  else pic(CATCH,ux,uy-15,74);
   ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillRect(0,uy+14,W,Math.max(0,H-uy-14));
     }
 
     obs.forEach(o=>pic(o.o,o.x,o.y,o.r*2));
-    if(st!=='win'&&!(inv>0&&Math.floor(ts*12)%2))pic(FISH,x,py,PR*3);
+    if(st!=='win'&&st!=='won'&&!(inv>0&&Math.floor(ts*12)%2))pic(FISH,x,py,PR*3);
     parts.forEach(p=>emoji(p.e,p.x,p.y,16,Math.max(0,p.l)));
   }
-  function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.033,(now-last)/1000||0);last=now;if(st==='play')update(dt);draw(now/1000);}
+  function stepParts(dt){parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=160*dt;p.l-=dt*.9;});parts=parts.filter(p=>p.l>0);}
+  function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.033,(now-last)/1000||0);last=now;if(st==='play')update(dt);else if(st==='won')stepParts(dt);
 
   function size(){const w=Math.min(modal.querySelector('.win').clientWidth-16,innerHeight*.62*W/H);cv.style.width=w+'px';cv.style.height=(w*H/W)+'px';}
   function open(){modal.classList.add('open');size();reset();st='idle';show('躲開障礙物<br>落進牛島的懷裡 ♡<br><small>手指左右拖曳移動</small>','開始');if(!raf){last=performance.now();raf=requestAnimationFrame(loop);}}
