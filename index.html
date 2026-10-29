@@ -760,7 +760,7 @@ function sprB(o,cx,by,m){if(!o.img||!CATCH.img)return;const k=SIZE/CATCH.sh*m,w=
   function loop(now){raf=requestAnimationFrame(loop);const dt=Math.min(.033,(now-last)/1000||0);last=now;if(st==='play')update(dt);else if(st==='won')stepParts(dt);draw(now/1000);}
 
   function size(){const w=Math.min(modal.querySelector('.win').clientWidth-16,innerHeight*.62*W/H);cv.style.width=w+'px';cv.style.height=(w*H/W)+'px';}
-  function open(){modal.classList.add('open');size();reset();st='idle';show('糟糕！小魚掉下來了🪽<br>協助小魚平穩地落進牛島的懷裡＞_＜ ♡<br><small>手指左右拖曳移動</small>','開始');if(!raf){last=performance.now();raf=requestAnimationFrame(loop);}}
+  function open(){modal.classList.add('open');size();reset();st='idle';show('糟糕！小魚掉下來了🪽<br>協助小魚躲開障礙物，平穩地落進牛島的懷裡＞_＜ ♡<br><small>手指左右拖曳移動</small>','開始');if(!raf){last=performance.now();raf=requestAnimationFrame(loop);}}
   $('fabGame').onclick=open;ovB.onclick=start;
   new MutationObserver(()=>{if(!modal.classList.contains('open')){cancelAnimationFrame(raf);raf=0;st='idle';}}).observe(modal,{attributes:true,attributeFilter:['class']});
   const setX=e=>{const r=cv.getBoundingClientRect();tx=Math.min(W-PR,Math.max(PR,(e.clientX-r.left)/r.width*W));};
