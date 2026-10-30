@@ -797,8 +797,8 @@ function sprB(o,cx,by,m){if(!o.img||!CATCH.img)return;const k=SIZE/CATCH.sh*m,w=
 
   /* ---- 顯示相簿（分類分頁；順序用「調整順序」手動決定，新增的卡片排在最後） ---- */
   let rows=[],curCat='ALL';
-  const CATS=['LD','SD','uori','Gift Art','🐶🐰']; /* 分類名稱，想改就改這裡 */
-  const inCat=r=>curCat==='ALL'?r.category!=='Gift Art':r.category===curCat; /* ALL 不顯示 Gift Art */
+  const CATS=['LD','SD','uori','🐶🐰','🎁'];
+  const inCat=r=>curCat==='ALL'?r.category!=='🎁':r.category===curCat; /* ALL 不顯示 Gift Art */
   function cardEl(row){const d=document.createElement('div');const th=gURL(row.thumb),adm=!!A.get();d.className='item'+(row.locked?' locked lockedv':'');
     d.innerHTML=`<div class="im">${th?`<img src="${th}" alt="" loading="lazy">`:''}${row.locked?'<span class="soon">to be soon</span>':''}</div><div class="t"><h3>${esc(row.title)}</h3>${row.scene?`<p class="txt">${esc(row.scene)}</p>`:''}${row.date?`<span class="dt">${esc(row.date)}</span>`:''}</div>`;
     d.onclick=()=>openGal(row);return d;}
