@@ -1,11 +1,13 @@
 /* album.js v8：相簿頁
-   圖庫：環形轉盤（＝ALL，不含鎖起來的和 Gift Art），圖下面有文字，點中間那張打開卡片
-   選集：分類相簿清單（ALL／LD／SD／uori／🐶🐰／Gift Art），點進去就是你原本的卡片格子（含管理功能）
+   圖庫：環形轉盤（＝ALL，不含鎖起來的和 🎁），圖下面有文字，點中間那張打開卡片
+   選集：分類相簿清單（ALL／LD／SD／uori／🐶🐰／🎁），點進去就是你原本的卡片格子（含管理功能）
    另外：管理的「調整順序」可以長按一列直接拖曳
    用法：index.html 最後 </body> 前面有 <script src="album.js"></script> 就好（取代舊的 album.js） */
 (function(){
-  const ALBUM_ORDER=['ALL','LD','SD','uori','🐶🐰','Gift Art'];   // 選集裡相簿的順序，想改就改這裡
-  const FEATURED=["⊹ ⁺ 小魚の誕生日⁺ ⊹","牛島の誕生日","恋の一周年","牛島誕生日","♡｡･ﾟ⊹ 恋の2周年･ﾟ｡ ♡","𝟨𝟢𝟢ᴅ ᴀɴɴɪᴠᴇʀꜱᴀʀʏ","⊹花火大会⋆。°🍡˖𖧷🎏☆.ᐟ","𓈒݂𓏴𓏴夢の国のアリス˖♤⋆₊🐇🕰️˚꩜","୧はじまりの約束°˖🎒⋆₊🩹˚꩜","︶︶微酔いの夜に˚꒷︶︶🍷꒷꒦♡₊˚","❆聖なる夜の贈り物⁺❆🎄⋆❄️✨","819 ハイキュー!!の日～！！￼","₊二人の願い˚⛩️⋆｡˚🔔₊⊹","⁠⋆⑅˚₊ 旅立ちと約束 🌸⋆ ₊ 🎓","⁠˚₊‧꒰ა ふたりだけのプリクラ 📸 ໒꒱","⁠︶₊ 湯気につつまれて ˚꒷︶🛁꒷꒦","秋！お散歩の日🍂￼","⁠𖦹˙⋆˚ まったりソファ時間 🛋️⋆","⋆⑅˚₊ ステッカー包 💜⋆ ₊ ✨","𑣲 🪪 証明写真のふたり ⋆ ˚࿔⁠","⁠ ☁️ ྀི 温もりのお裾分け⋆ ₊","⁠ ⋆ ˚࿔ 二人の自撮り時間 📸⋆ ₊ ✦","⋆.おでこにキス ₊˚ ꩜","⁠♬⋆.˚𝄞₊˚⊹ デフォルメの日常 ᰔ ✶⋆.˚⁠","₊⁠︶︶₊˚꒷ 聖域の誘惑 ꒷꒦♡₊","♡⋆ᯓ★ 永遠の絡まり ⁺˚₊‧⁠","˚⊹縮距離の体温 💜⋆ ₊","⊹ ࣪ わんこな若利と白うさぎ魚織 ࣪ ˖ ໒꒱⋆","໒꒱ ⋆𐙚₊˚天使の犬と悪魔のうさぎ ˚✧♡⁠"];
+  const ALBUM_ORDER=['ALL','LD','SD','uori','🐶🐰','🎁'];   // 選集裡相簿的順序，想改就改這裡
+  const FEATURED=["⊹ ⁺ 小魚の誕生日⁺ ⊹","牛島の誕生日","恋の一周年","牛島誕生日","♡｡･ﾟ⊹ 恋の2周年･ﾟ｡ ♡","𝟨𝟢𝟢ᴅ ᴀɴɴɪᴠᴇʀꜱᴀʀʏ","⊹花火大会⋆。°🍡˖𖧷🎏☆.ᐟ","𓈒݂𓏴𓏴夢の国のアリス˖♤⋆₊🐇🕰️˚꩜","୧はじまりの約束°˖🎒⋆₊🩹˚꩜","︶︶微酔いの夜に˚꒷︶︶🍷꒷꒦♡₊˚","❆聖なる夜の贈り物⁺❆🎄⋆❄️✨","819 ハイキュー!!の日～！！￼","₊二人の願い˚⛩️⋆｡˚🔔₊⊹","⁠⋆⑅˚₊ 旅立ちと約束 🌸⋆ ₊ 🎓","⁠˚₊‧꒰ა ふたりだけのプリクラ 📸 ໒꒱","⁠︶₊ 湯気につつまれて ˚꒷︶🛁꒷꒦","秋！お散歩の日🍂￼","⁠𖦹˙⋆˚ まったりソファ時間 🛋️⋆","⋆⑅˚₊ ステッカー包 💜⋆ ₊ ✨","𑣲 🪪 証明写真のふたり ⋆ ˚࿔⁠","⁠ ☁️ ྀི 温もりのお裾分け⋆ ₊","⁠ ⋆ ˚࿔ 二人の自撮り時間 📸⋆ ₊ ✦","⋆.おでこにキス ₊˚ ꩜","⁠♬⋆.˚𝄞₊˚⊹ デフォルメの日常 ᰔ ✶⋆.˚⁠","₊⁠︶︶₊˚꒷ 聖域の誘惑 ꒷꒦♡₊","♡⋆ᯓ★ 永遠の絡まり ⁺˚₊‧⁠","˚⊹縮距離の体温 💜⋆ ₊","⊹ ࣪ わんこな若利と白うさぎ魚織 ࣪ ˖ ໒꒱⋆","໒꒱ ⋆𐙚₊˚天使の犬と悪魔のうさぎ ˚✧♡⁠"];   // 轉盤精選：填卡片標題，留空＝全部。不知道怎麼填？網址後面加 #pick，勾選後會產生這一行
+  const key=t=>String(t||'').normalize('NFKC').replace(/[^\p{L}\p{N}]/gu,'');
+  const same=(a,b)=>{const x=key(a),y=key(b);return x&&y?x===y:a===b;};
   const $=id=>document.getElementById(id);
   const pg=$('p-gallery');
   const SBU=SB_URL.replace(/\/$/,''),NAME_RE=/^[A-Za-z0-9_-]{6,60}\.jpg$/;
@@ -140,15 +142,15 @@
   const itemOf=r=>({row:r,srcs:()=>[gURL(r.photos&&r.photos[0]),gURL(r.thumb),domThumb(r)]});
   const lib=Carousel($('lcv'),{count:t=>{$('lcn').textContent=t;},open:row=>{ctx=libRows;ctxIdx=libRows.indexOf(row);openOriginal(row);}});
   function libList(){
-    if(FEATURED.length){const out=[];FEATURED.forEach(t=>{const r=rows.find(x=>x.title===t&&!x.locked);if(r&&!out.includes(r))out.push(r);});if(out.length)return out;}
-    return rows.filter(r=>r.category!=='Gift Art'&&!r.locked);}
+    if(FEATURED.length){const out=[];FEATURED.forEach(t=>{const r=rows.find(x=>same(x.title,t)&&!x.locked);if(r&&!out.includes(r))out.push(r);});if(out.length)return out;}
+    return rows.filter(r=>r.category!=='🎁'&&!r.locked);}
   function showLib(){libRows=libList();lib.set(libRows.map(itemOf));}
 
   function openAlbum(name){const tab=tabBtns().find(b=>b.textContent===name);quiet=Date.now()+900;
     if(tab&&!tab.classList.contains('on'))tab.click();pg.classList.add('det');scrollTo(0,0);}
   function renderCol(){const box=$('vcol');box.textContent='';
     const names=[...ALBUM_ORDER];rows.forEach(r=>{const c=r.category||'';if(c&&!names.includes(c))names.push(c);});
-    names.forEach(n=>{const rs=n==='ALL'?rows.filter(r=>r.category!=='Gift Art'):rows.filter(r=>(r.category||'')===n);if(!rs.length)return;
+    names.forEach(n=>{const rs=n==='ALL'?rows.filter(r=>r.category!=='🎁'):rows.filter(r=>(r.category||'')===n);if(!rs.length)return;
       const a=document.createElement('div');a.className='alb';
       const f=rs.find(r=>!r.locked)||rs[0];
       const im=document.createElement('img');im.alt='';im.src=gURL(f.thumb)||gURL(f.photos&&f.photos[0])||gURL(f.blur_thumb)||'';if(f.locked)im.style.filter='blur(8px)';
@@ -208,8 +210,8 @@
     ov.innerHTML='<div class="pk1"><span>勾選要在轉盤出現的照片（依勾選順序）</span><button type="button" id="pkx">✕</button></div><div class="pkl" id="pkl"></div><div class="pkf"><textarea id="pkt" readonly></textarea><button type="button" id="pkc">複製這一行</button> <span id="pks" style="font-size:.7rem"></span></div>';
     document.body.appendChild(ov);
     const ta=$('pkt'),upd=()=>{ta.value='const FEATURED='+JSON.stringify(sel)+';';};
-    rows.filter(r=>!r.locked).forEach(r=>{const lb=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.checked=sel.includes(r.title);
-      cb.onchange=()=>{const i=sel.indexOf(r.title);if(cb.checked&&i<0)sel.push(r.title);if(!cb.checked&&i>=0)sel.splice(i,1);upd();};
+    rows.filter(r=>!r.locked).forEach(r=>{const lb=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.checked=sel.some(s=>same(s,r.title));
+      cb.onchange=()=>{const i=sel.findIndex(s=>same(s,r.title));if(cb.checked&&i<0)sel.push(r.title);if(!cb.checked&&i>=0)sel.splice(i,1);upd();};
       const im=document.createElement('img');im.src=gURL(r.thumb)||gURL(r.photos&&r.photos[0]);im.alt='';
       const t=document.createElement('span');t.textContent=r.title||'';const sm=document.createElement('small');sm.textContent=(r.category||'')+' '+(r.date||'');t.appendChild(sm);
       lb.append(cb,im,t);$('pkl').appendChild(lb);});
